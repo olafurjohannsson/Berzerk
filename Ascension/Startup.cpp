@@ -47,6 +47,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
 	BZK::EndMemService();
 	// END MemService testing.
+	// Modified comment!
 
 	output.close();
 
