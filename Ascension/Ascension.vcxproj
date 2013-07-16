@@ -78,6 +78,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BZK_MemService.cpp" />
+    <ClCompile Include="BZK_Utility.cpp" />
+    <ClCompile Include="Startup.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BZK_MemService.h" />
+    <ClInclude Include="BZK_Utility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

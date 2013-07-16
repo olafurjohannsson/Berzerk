@@ -13,5 +13,30 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Core Services">
+      <UniqueIdentifier>{80166f31-0b60-45d0-9230-268190fbb8a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Services\Memory Management">
+      <UniqueIdentifier>{81a0c0d1-05aa-485c-a1be-e73a8bc070ea}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Startup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BZK_MemService.cpp">
+      <Filter>Core Services\Memory Management</Filter>
+    </ClCompile>
+    <ClCompile Include="BZK_Utility.cpp">
+      <Filter>Core Services</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BZK_MemService.h">
+      <Filter>Core Services\Memory Management</Filter>
+    </ClInclude>
+    <ClInclude Include="BZK_Utility.h">
+      <Filter>Core Services</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
