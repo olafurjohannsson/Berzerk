@@ -4,6 +4,7 @@
 
 #include "BZK_MemService.h"
 #include "BZK_Utility.h"
+#include "BZK_FileSystem.h"
 
 namespace BZK
 {
@@ -27,6 +28,14 @@ namespace BZK
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 {
+	std::wstring path = L"C:\\Users\\Lenovo\\Dropbox\\root\\Projects\\Berzerk\\Ascension";
+
+	BZK::FileSystem *fs = BZK::Alloc<BZK::FileSystem>(path);
+
+	fs->CreateDir(L"myfoldah");
+	fs->CreateFilez(L"myfilah.txt");
+
+
 	std::ofstream output("asc_log.txt");
 	output << "Some logging text?" << std::endl;
 
