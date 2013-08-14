@@ -13,3 +13,4 @@ void BZK::CopyMemBytes(char * A_dest, const char * A_src, unsigned int A_size)
 {
 	::CopyMemory((void *)A_dest, (void *)A_src, A_size);
 }
+

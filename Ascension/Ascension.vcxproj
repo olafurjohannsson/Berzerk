@@ -78,13 +78,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BZK_LoggerService.cpp" />
     <ClCompile Include="BZK_MemService.cpp" />
     <ClCompile Include="BZK_Utility.cpp" />
+    <ClCompile Include="BZK_FileSystem.cpp" />
     <ClCompile Include="Startup.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BZK_LoggerService.h" />
     <ClInclude Include="BZK_MemService.h" />
+    <ClInclude Include="BZK_Typedef.h" />
     <ClInclude Include="BZK_Utility.h" />
+    <ClInclude Include="BZK_FileSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

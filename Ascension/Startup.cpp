@@ -32,9 +32,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
 	BZK::FileSystem *fs = BZK::Alloc<BZK::FileSystem>(path);
 
-	fs->CreateDir(L"myfoldah");
-	fs->CreateFilez(L"myfilah.txt");
-
+	fs->CreateDir(L"asdf");
+	
 
 	std::ofstream output("asc_log.txt");
 	output << "Some logging text?" << std::endl;

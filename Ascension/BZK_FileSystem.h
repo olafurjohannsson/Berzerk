@@ -22,10 +22,10 @@ namespace BZK
 		~FileSystem();
 
 		
-
-		void CreateFilez(const BZKSTRING &fullname);
+		void CreateDir(const BZKSTRING &name, bool is_absolute = false);
+		void CreateFilez(const BZKSTRING &fullname, bool is_absolute = false);
 		void DefineRootPath(const BZKSTRING &path);
-		void CreateDir(const BZKSTRING &name);
+		
 		
 
 

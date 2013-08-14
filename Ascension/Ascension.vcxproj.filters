@@ -30,12 +30,27 @@
     <ClCompile Include="BZK_Utility.cpp">
       <Filter>Core Services</Filter>
     </ClCompile>
+    <ClCompile Include="BZK_LoggerService.cpp">
+      <Filter>Core Services</Filter>
+    </ClCompile>
+    <ClCompile Include="BZK_FileSystem.cpp">
+      <Filter>Core Services</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BZK_MemService.h">
       <Filter>Core Services\Memory Management</Filter>
     </ClInclude>
     <ClInclude Include="BZK_Utility.h">
+      <Filter>Core Services</Filter>
+    </ClInclude>
+    <ClInclude Include="BZK_LoggerService.h">
+      <Filter>Core Services</Filter>
+    </ClInclude>
+    <ClInclude Include="BZK_FileSystem.h">
+      <Filter>Core Services</Filter>
+    </ClInclude>
+    <ClInclude Include="BZK_Typedef.h">
       <Filter>Core Services</Filter>
     </ClInclude>
   </ItemGroup>
