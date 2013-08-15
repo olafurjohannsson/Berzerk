@@ -21,25 +21,31 @@ namespace BZK
 			*out << "This class has the data value: " << data << "!" << std::endl;
 		}
 
+		void TestFileSystem()
+		{
+			std::wstring path = L"C:\\Users\\Lenovo\\Dropbox\\root\\Projects\\Berzerk\\Ascension";
+			BZK::FileSystem *fs = BZK::Alloc<BZK::FileSystem>(path);
+			fs->CreateDir(L"asdf");
+			fs->CreateFilez(L"asdf\\test.txt");
+		}
+
 		std::ofstream * out;
 		unsigned int data;
 	};
 }
 
+
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 {
-	std::wstring path = L"C:\\Users\\Lenovo\\Dropbox\\root\\Projects\\Berzerk\\Ascension";
+	// BEGIN MemService testing:
+	BZK::InitMemService();
 
-	BZK::FileSystem *fs = BZK::Alloc<BZK::FileSystem>(path);
 
-	fs->CreateDir(L"asdf");
-	
+
+
 
 	std::ofstream output("asc_log.txt");
 	output << "Some logging text?" << std::endl;
-
-	// BEGIN MemService testing:
-	BZK::InitMemService();
 
 	BZK::TestClass * ptr = BZK::Alloc<BZK::TestClass>(&output);
 	BZK::TestClass * ptr2 = BZK::Alloc<BZK::TestClass>(&output);

@@ -2,13 +2,6 @@
 #include "BZK_LoggerService.h"
 
 
-BZK::LoggerService::LoggerService()
-{
-}
-
-BZK::LoggerService::~LoggerService()
-{
-}
 
 
 

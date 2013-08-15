@@ -1,4 +1,5 @@
 #include "BZK_Typedef.h"
+#include "BZK_LoggerService.h"
 #include <string>
 
 #pragma once
@@ -16,7 +17,10 @@ namespace BZK
 	{
 	public:
 		FileSystem();
-		FileSystem(const BZKSTRING &p) : path(p) {};
+		FileSystem(const BZKSTRING &p) : path(p) 
+		{
+			this->path = p;
+		};
 
 
 		~FileSystem();
@@ -25,7 +29,7 @@ namespace BZK
 		void CreateDir(const BZKSTRING &name, bool is_absolute = false);
 		void CreateFilez(const BZKSTRING &fullname, bool is_absolute = false);
 		void DefineRootPath(const BZKSTRING &path);
-		
+		BZKSTRING GetPath(const BZKSTRING &path);
 		
 
 
