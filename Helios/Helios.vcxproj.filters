@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Startup.cpp" />
+    <ClCompile Include="BRZ_Window.cpp">
+      <Filter>Core Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="BRZ_Define.cpp" />
+    <ClCompile Include="BRZ_Time.cpp">
+      <Filter>Core Modules</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Core Modules">
+      <UniqueIdentifier>{12f0c1c2-c4bd-4195-8ea4-ff6fafa226d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Modules\Graphics">
+      <UniqueIdentifier>{023f0eee-9da9-4168-b0b7-3455730451db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Modules\Math">
+      <UniqueIdentifier>{cceb4f99-b89e-42a5-8aee-1f6978cf701f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BRZ_Environment.h">
+      <Filter>Core Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_Window.h">
+      <Filter>Core Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_Define.h" />
+    <ClInclude Include="BRZ_Time.h">
+      <Filter>Core Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_Display.h">
+      <Filter>Core Modules\Graphics</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

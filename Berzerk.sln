@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio Express 2012 for Windows Desktop
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ascension", "Ascension\Ascension.vcxproj", "{3A5D71DA-1C72-4757-A899-C3433D72CBAC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Helios", "Helios\Helios.vcxproj", "{FDF9DBDF-7FE3-4FA3-A656-9738D1955085}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +15,10 @@ Global
 		{3A5D71DA-1C72-4757-A899-C3433D72CBAC}.Debug|Win32.Build.0 = Debug|Win32
 		{3A5D71DA-1C72-4757-A899-C3433D72CBAC}.Release|Win32.ActiveCfg = Release|Win32
 		{3A5D71DA-1C72-4757-A899-C3433D72CBAC}.Release|Win32.Build.0 = Release|Win32
+		{FDF9DBDF-7FE3-4FA3-A656-9738D1955085}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FDF9DBDF-7FE3-4FA3-A656-9738D1955085}.Debug|Win32.Build.0 = Debug|Win32
+		{FDF9DBDF-7FE3-4FA3-A656-9738D1955085}.Release|Win32.ActiveCfg = Release|Win32
+		{FDF9DBDF-7FE3-4FA3-A656-9738D1955085}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
