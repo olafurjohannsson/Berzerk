@@ -20,10 +20,11 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 
-typedef char			BRZBYTE;
-typedef wchar_t			BRZCHAR;
-typedef std::wstring    BRZSTRING;
-typedef unsigned int	BRZRESULT;
+typedef char				BRZBYTE;
+typedef wchar_t				BRZCHAR;
+typedef std::wstring		BRZSTRING;
+typedef unsigned int		BRZRESULT;
+typedef DirectX::XMMATRIX	BRZMATRIX;
 
 #define BRZ_SUCCESS		0
 #define BRZ_FAILURE		1

@@ -9,6 +9,9 @@
     <ClCompile Include="BRZ_Time.cpp">
       <Filter>Core Modules</Filter>
     </ClCompile>
+    <ClCompile Include="BRZ_Display.cpp">
+      <Filter>Core Modules\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core Modules">
@@ -19,6 +22,12 @@
     </Filter>
     <Filter Include="Core Modules\Math">
       <UniqueIdentifier>{cceb4f99-b89e-42a5-8aee-1f6978cf701f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Modules\Scene">
+      <UniqueIdentifier>{ea531aa7-c5e3-44ae-8d78-e0200a007568}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{ae81d167-db45-43cf-a975-2ac163dffa7a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -35,5 +44,16 @@
     <ClInclude Include="BRZ_Display.h">
       <Filter>Core Modules\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="BRZ_Object.h">
+      <Filter>Core Modules\Scene</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="ps_default.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="vs_default.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
