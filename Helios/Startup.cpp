@@ -69,6 +69,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 			DispatchMessage(&message);
 		}
 
+		/*
 		float rateT = 5;
 		float rateR = BRZ::PI / 4;
 
@@ -82,6 +83,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 		rOff /= 1000.0f;
 		rOff *= rateR;
 		objR += rOff;
+		*/
 
 		disp->Render(objX, objY, objR);
 	}

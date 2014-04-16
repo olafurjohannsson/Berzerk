@@ -227,8 +227,8 @@ BRZRESULT BRZ::Display::LoadShaders()
 
 BRZRESULT BRZ::Display::GenerateGeo()
 {
-	BRZ::Vertex	*		vertices = new BRZ::Vertex[3];
-	unsigned int *		indices = new unsigned int[6];
+	BRZ::Vertex	*		vertices = new BRZ::Vertex[4];
+	unsigned int *		indices = new unsigned int[8];
 	D3D11_BUFFER_DESC	vertexBufferDesc;
 	D3D11_BUFFER_DESC	indexBufferDesc;
 
@@ -238,10 +238,10 @@ BRZRESULT BRZ::Display::GenerateGeo()
 
 
 	// Set the number of vertices in the vertex array.
-	vertCount = 3;
+	vertCount = 4;
 
 	// Set the number of indices in the index array.
-	indexCount = 6;
+	indexCount = 8;
 
 	lineCount = 3;
 
@@ -249,15 +249,18 @@ BRZRESULT BRZ::Display::GenerateGeo()
 	// Load the vertex array with data.
 	vertices[0].pos = DirectX::XMFLOAT3(-10.0f, -10.0f, 10.0f);
 	vertices[1].pos = DirectX::XMFLOAT3(10.0f, -10.0f, 10.0f);
-	vertices[2].pos = DirectX::XMFLOAT3(0.0f, 5.0f, 10.0f);
+	vertices[2].pos = DirectX::XMFLOAT3(-10.0f, 10.0f, 10.0f);
+	vertices[3].pos = DirectX::XMFLOAT3(10.0f, 10.0f, 10.0f);
 
 	// Load the index array with data.
 	indices[0] = 0;  // Bottom left.
 	indices[1] = 1;  // Top middle.
 	indices[2] = 1;  // Bottom right
-	indices[3] = 2;
-	indices[4] = 2;
-	indices[5] = 0;
+	indices[3] = 3;
+	indices[4] = 3;
+	indices[5] = 2;
+	indices[6] = 0;
+	indices[7] = 2;
 
 	// Set up the description of the static vertex buffer.
     vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -556,8 +559,16 @@ BRZRESULT BRZ::Display::Initialize(HWND A_wnd)
     swapChainDesc.BufferCount = 1;
 
 	// Set the width and height of the back buffer.
-    swapChainDesc.BufferDesc.Width = screenWidth;
-    swapChainDesc.BufferDesc.Height = screenHeight;
+	if (fullScreen)
+	{
+		swapChainDesc.BufferDesc.Width = screenWidth;
+		swapChainDesc.BufferDesc.Height = screenHeight;
+	}
+	else
+	{
+		swapChainDesc.BufferDesc.Width = BRZ::WND_WIDTH;
+		swapChainDesc.BufferDesc.Height = BRZ::WND_HEIGHT;
+	}
 
 	// Set regular 32-bit surface for the back buffer.
     swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -641,8 +652,16 @@ BRZRESULT BRZ::Display::Initialize(HWND A_wnd)
 	// ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
 
 	// Set up the description of the depth buffer.
-	depthBufferDesc.Width = screenWidth;
-	depthBufferDesc.Height = screenHeight;
+	if (fullScreen)
+	{
+		depthBufferDesc.Width = screenWidth;
+		depthBufferDesc.Height = screenHeight;
+	}
+	else
+	{
+		depthBufferDesc.Width = BRZ::WND_WIDTH;
+		depthBufferDesc.Height = BRZ::WND_HEIGHT;
+	}
 	depthBufferDesc.MipLevels = 1;
 	depthBufferDesc.ArraySize = 1;
 	depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -720,7 +739,7 @@ BRZRESULT BRZ::Display::Initialize(HWND A_wnd)
 	// Setup the raster description which will determine how and what polygons will be drawn.
 	BRZ::ZeroMem(&rasterDesc);
 	rasterDesc.AntialiasedLineEnable = true;
-	rasterDesc.CullMode = D3D11_CULL_NONE;
+	rasterDesc.CullMode = D3D11_CULL_BACK;
 	rasterDesc.DepthBias = 0;
 	rasterDesc.DepthBiasClamp = 0.0f;
 	rasterDesc.DepthClipEnable = true;
@@ -742,8 +761,16 @@ BRZRESULT BRZ::Display::Initialize(HWND A_wnd)
 	context->RSSetState(rasterState);
 	
 	// Setup the viewport for rendering.
-    viewport.Width = 800;
-    viewport.Height = 600;
+	if (fullScreen)
+	{
+		viewport.Width = screenWidth;
+		viewport.Height = screenHeight;
+	}
+	else
+	{
+		viewport.Width = BRZ::WND_WIDTH;
+		viewport.Height = BRZ::WND_HEIGHT;
+	}
     viewport.MinDepth = 0.0f;
     viewport.MaxDepth = 1.0f;
     viewport.TopLeftX = 0.0f;
@@ -753,8 +780,8 @@ BRZRESULT BRZ::Display::Initialize(HWND A_wnd)
     context->RSSetViewports(1, &viewport);
 
 	// Setup the projection matrix.
-	fieldOfView = (float)BRZ::PI / 4.0f;
-	screenAspect = (float)800 / (float)600;
+	// fieldOfView = (float)BRZ::PI / 4.0f;
+	// screenAspect = (float)800 / (float)600;
 
 	// Create the projection matrix for 3D rendering.
 	// projection = DirectX::XMMatrixPerspectiveLH(800, 600, 0.1f, 1000f);
@@ -765,7 +792,10 @@ BRZRESULT BRZ::Display::Initialize(HWND A_wnd)
     // D3DXMatrixIdentity(&m_worldMatrix);
 
 	// Create an orthographic projection matrix for 2D rendering.
-	projection = DirectX::XMMatrixOrthographicLH(800, 600, 0.1f, 1000.0f);
+	if (fullScreen)
+		projection = DirectX::XMMatrixOrthographicLH(screenWidth, screenHeight, 0.1f, 1000.0f);
+	else
+		projection = DirectX::XMMatrixOrthographicLH(BRZ::WND_WIDTH, BRZ::WND_HEIGHT, 0.1f, 1000.0f);
 	// D3DXMatrixOrthoLH(&m_orthoMatrix, (float)screenWidth, (float)screenHeight, screenNear, screenDepth);
 
 	DirectX::XMVECTORF32 eye = {0.0f, 0.0f, -10.0f };

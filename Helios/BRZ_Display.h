@@ -9,6 +9,8 @@
 
 namespace BRZ
 {
+	const unsigned int	WND_HEIGHT = 600;
+	const unsigned int	WND_WIDTH = 800;
 	class Vertex
 	{
 	public:
