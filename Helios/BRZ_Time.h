@@ -11,30 +11,34 @@ namespace BRZ
 	class Time
 	{
 	public:
+		struct Package
+		{
+			Package() : poke(false), exit(NULL), cores(1), freq(1), stamp(0), frame(0), turn(0)	{    }
+
+			volatile bool		poke;
+			volatile bool *		exit;
+			unsigned int		cores;
+			unsigned __int64	freq;
+			unsigned __int64	stamp;
+			unsigned __int64	frame;
+			unsigned int		turn;
+		};
+
+	public:
 		Time();
+		~Time();
 
 	public:
 		BRZRESULT		Cycle();
 		unsigned int	LastFrame() const;
 		unsigned int	TotalFrames() const;
 
-		BRZRESULT		BeginCapture();
-		BRZRESULT		EndCapture();
-		unsigned int	CapAverage() const;
-		unsigned int	CapDuration() const;
-		unsigned int	CapFrames() const;
+	public:
+		static DWORD WINAPI WorkerProc(LPVOID param);
 
 	private:
-		unsigned __int64	freq;
-		unsigned __int64	stamp;
-		unsigned __int64	frame;
-
-		unsigned int		turn;
-
-		bool				capturing;
-		unsigned int		capFrameInit;
-		unsigned int		capFrameEnd;
-		unsigned __int64	capInit;
-		unsigned __int64	capEnd;
+		HANDLE			worker;
+		unsigned int	workerID;
+		Package *		data;
 	};
 }

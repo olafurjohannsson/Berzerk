@@ -7,157 +7,141 @@
 	class Time
 	{
 	public:
+		struct Package
+		{
+			Package() : poke(false), cores(1), freq(1), stamp(0), frame(0), turn(0)	{    }
+
+			bool	 			poke;
+			unsigned int		cores;
+			unsigned __int64	freq;
+			unsigned __int64	stamp;
+			unsigned __int64	frame;
+			unsigned int		turn;
+		};
+
+	public:
 		Time();
+		~Time();
 
 	public:
 		BRZRESULT		Cycle();
 		unsigned int	LastFrame() const;
 		unsigned int	TotalFrames() const;
 
-		BRZRESULT		BeginCapture();
-		BRZRESULT		EndCapture();
-		unsigned int	CapAverage() const;
-		unsigned int	CapDuration() const;
-		unsigned int	CapFrames() const;
+	public:
+		static DWORD WINAPI WorkerProc(LPVOID param);
 
 	private:
-		unsigned __int64	freq;
-		unsigned __int64	stamp;
-		unsigned __int64	frame;
-
-		unsigned int		turn;
-
-		bool				capturing;
-		unsigned int		capFrameInit;
-		unsigned int		capFrameEnd;
-		unsigned __int64	capInit;
-		unsigned __int64	capEnd;
+		HANDLE		worker;
+		Package *	data;
 	};
 */
 
 
-unsigned int BRZ::Time::CapFrames() const
-{
-	if (capturing)
-		return 0;
-
-	return capFrameEnd - capFrameInit;
-}
-
-
-unsigned int BRZ::Time::CapDuration() const
-{
-	if (capturing)
-		return 0;
-
-	unsigned __int64	ms = (capEnd - capInit) / (freq / 1000);
-	LARGE_INTEGER		holder;
-	holder.QuadPart = ms;
-
-	return holder.LowPart;
-}
-
-
-unsigned int BRZ::Time::CapAverage() const
-{
-	if (capturing)
-		return 0;
-
-	unsigned __int64	ms = (capEnd - capInit) / (freq / 1000);
-	LARGE_INTEGER		holder;
-	holder.QuadPart = ms;
-
-	return holder.LowPart / (capFrameEnd - capFrameInit);
-}
-
-
-BRZRESULT BRZ::Time::EndCapture()
-{
-	if (!capturing)
-		return BRZ_FAILURE;
-
-	capFrameEnd = turn;
-	capEnd = stamp;
-	capturing = false;
-
-	return BRZ_SUCCESS;
-}
-
-
-BRZRESULT BRZ::Time::BeginCapture()
-{
-	if (capturing)
-		return BRZ_FAILURE;
-	else
-	{
-		capFrameInit = 0;
-		capFrameEnd = 0;
-		capInit = 0;
-		capEnd = 0;
-	}
-
-	capFrameInit = turn;
-	capInit = stamp;
-	capturing = true;
-
-	return BRZ_SUCCESS;
-}
-
-
-unsigned int BRZ::Time::TotalFrames() const
-{
-	return turn;
-}
-
-
-unsigned int BRZ::Time::LastFrame() const
-{
-	unsigned __int64	ms = frame / (freq / 1000);
-	LARGE_INTEGER		holder;
-
-	holder.QuadPart = ms;
-	return holder.LowPart;
-}
-
-
-BRZRESULT BRZ::Time::Cycle()
-{
-	unsigned __int64	ticks = 0;
-	LARGE_INTEGER		holder;
-
-	::QueryPerformanceCounter(&holder);
-	ticks = holder.QuadPart;
-
-	ticks = ticks - stamp;
-
-	if (stamp == 0)
-		frame = 0;
-	else
-		frame = ticks;
-
-	stamp += ticks;
-	++turn;
-
-	return BRZ_SUCCESS;
-}
-
-
 BRZ::Time::Time() :
-	freq(1),
-	stamp(0),
-	frame(0),
-	turn(0),
-	capturing(false),
-	capFrameInit(0),
-	capFrameEnd(0),
-	capInit(0),
-	capEnd(0)
+	worker(NULL),
+	workerID(0),
+	data(NULL)
 {
+	data = new BRZ::Time::Package();
 	LARGE_INTEGER holder;
 
 	if (!::QueryPerformanceFrequency(&holder))
 		::MessageBox(NULL, L"Performance Timer unavailable!", L"Fatal Error", MB_OK);
 	else
-		this->freq = holder.QuadPart;
+		this->data->freq = holder.QuadPart;
+
+	SYSTEM_INFO sysinfo;
+	GetSystemInfo( &sysinfo );
+	this->data->cores = sysinfo.dwNumberOfProcessors;
+
+	worker = ::CreateThread(NULL, 0, &BRZ::Time::WorkerProc, (LPVOID)data, 0, (LPDWORD)&workerID);
+	// Set the thread affinity mask for only core 2 (Note that one should implement behaviour based
+	//	on how many cores the processor has; different behaviour will be needed on single core machines
+	// ~ a non-threaded solution would work just fine there.
+	if (::SetThreadAffinityMask(worker, 1<<1) == 0)
+	{
+		::MessageBox(NULL, L"Performance Timer Thread Affinity Error!", L"Fatal Error", MB_OK);
+	}
+
+	this->Cycle();
 }
+
+
+BRZ::Time::~Time()
+{
+	*data->exit = true;
+	delete data;
+}
+
+
+
+
+unsigned int BRZ::Time::TotalFrames() const
+{
+	return data->turn;
+}
+
+
+unsigned int BRZ::Time::LastFrame() const
+{
+	// Check if the cycle is definitely done:
+	if (data->poke)
+		return -1;
+
+	unsigned __int64	ms = data->frame / (data->freq / 1000);
+	LARGE_INTEGER		holder;
+
+	holder.QuadPart = ms;
+	return holder.LowPart;
+}
+
+
+DWORD WINAPI BRZ::Time::WorkerProc(LPVOID A_arg)
+{
+	BRZ::Time::Package * pak = (BRZ::Time::Package *)A_arg;
+	bool * exit = new bool(false);
+	pak->exit = exit;
+
+	while (!*exit)
+	{
+		if (!pak->poke)
+			continue;
+		else
+		{
+			// The timer has been poked to a new frame, update the frame number (turn), the timing of 
+			//	the last frame (frame) and the total timestamp (stamp).
+			unsigned __int64	ticks = 0;
+			LARGE_INTEGER		holder;
+
+			::QueryPerformanceCounter(&holder);
+			ticks = holder.QuadPart;
+
+			ticks = ticks - pak->stamp;
+
+			if (pak->stamp == 0)
+				pak->frame = 0;
+			else
+				pak->frame = ticks;
+
+			pak->stamp += ticks;
+			++pak->turn;
+			pak->poke = false;
+		}
+	}
+	delete exit;
+
+	return 0;
+}
+
+
+BRZRESULT BRZ::Time::Cycle()
+{
+	data->poke = true;
+
+	return BRZ_SUCCESS;
+}
+
+
+
 

@@ -14,6 +14,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 {
 	std::ofstream logout("Log_Helios.txt");
 
+	SYSTEM_INFO sysinfo;
+	GetSystemInfo( &sysinfo );
+
+	unsigned int numCPU = sysinfo.dwNumberOfProcessors;
+	logout << "Initializing Helios: " << numCPU << " processer cores." << std::endl;
+
 	BRZ::Time timer;
 
 	BRZ::Window wnd;
@@ -58,10 +64,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	float objX = 0.0f;
 	float objY = 0.0f;
 	float objR = 0.0f;
+	unsigned int acc = 0;
 
 	while (wnd.Active())
 	{
-		timer.Cycle();
+		
 		MSG message;
 		while((PeekMessage(&message, NULL, 0, 0, PM_REMOVE) > 0))
 		{
@@ -69,22 +76,29 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 			DispatchMessage(&message);
 		}
 
-		/*
+		
 		float rateT = 5;
-		float rateR = BRZ::PI / 4;
+		float rateR = BRZ::HALF_PI;
 
 		float xOff = timer.LastFrame();
 		xOff /= 1000.0f;
 		xOff *= rateT;
 		objX += xOff;
+		
 
 
+		acc += timer.LastFrame();
 		float rOff = timer.LastFrame();
 		rOff /= 1000.0f;
 		rOff *= rateR;
-		objR += rOff;
-		*/
-
+		// objR += rOff;
+		if (acc > 1000)
+		{
+			acc -= 1000;
+			objR += (BRZ::HALF_PI / 2);
+		}
+		
+		timer.Cycle();
 		disp->Render(objX, objY, objR);
 	}
 
