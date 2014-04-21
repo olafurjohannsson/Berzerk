@@ -1,7 +1,7 @@
 
 #pragma once
 #ifdef BRZ_HEADERTRACE
-#pragma message "Header Trace: BRZ_Define.h"
+#pragma message ( "Header Trace: BRZ_Define.h" )
 #endif
 
 
@@ -16,7 +16,13 @@
 
 
 #include <string>
-// #include <Windows.h>
+#include <vector>
+#include <list>
+#include <map>
+#include <queue>
+#include <fstream>
+#include <sstream>
+
 #include <d3d11.h>
 #include <DirectXMath.h>
 
@@ -29,18 +35,48 @@ typedef DirectX::XMMATRIX	BRZMATRIX;
 #define BRZ_SUCCESS		0
 #define BRZ_FAILURE		1
 
+// Certain mathematical constants:
 namespace BRZ
 {
-	const float EPS = 0.000000001f;
+	const float EPS = 0.0000001f;
 	const float PI = DirectX::XM_PI;
 	const float HALF_PI = BRZ::PI / 2.0f;
 	const float TWO_PI = BRZ::PI * 2.0f;
+}
+
+// Forward declaration for graphics module classes:
+namespace BRZ
+{
+	class Colour;
+	class Display;
+	class LineTemplate;
+	class LineElement;
+
+	class LineObject;
+	class LineReference;
+	
+
+	class RawElement;
+	class RawGeometry;
+}
+
+
+// Forward declaration for math classes:
+namespace BRZ
+{
+	class Coord2;
+	class Vec2;
 }
 
 
 
 namespace BRZ
 {
+	// String utility functions:
+	BRZSTRING		Widen(const std::string & str);
+	std::string		Narrow(const BRZSTRING & str);
+
+	// General memory utility functions:
 	void ZeroMemBytes(BRZBYTE * destination, unsigned int size);
 	void CopyMemBytes(BRZBYTE * destination, const BRZBYTE * source, unsigned int size);
 

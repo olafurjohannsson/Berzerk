@@ -78,17 +78,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BRZ_Colour.cpp" />
+    <ClCompile Include="BRZ_Coord2.cpp" />
     <ClCompile Include="BRZ_Define.cpp" />
     <ClCompile Include="BRZ_Display.cpp" />
+    <ClCompile Include="BRZ_LineElement.cpp" />
+    <ClCompile Include="BRZ_LineTemplate.cpp" />
+    <ClCompile Include="BRZ_RawElement.cpp" />
+    <ClCompile Include="BRZ_RawGeometry.cpp" />
     <ClCompile Include="BRZ_Time.cpp" />
+    <ClCompile Include="BRZ_Vec2.cpp" />
     <ClCompile Include="BRZ_Window.cpp" />
     <ClCompile Include="Startup.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BRZ_Colour.h" />
+    <ClInclude Include="BRZ_Coord2.h" />
     <ClInclude Include="BRZ_Define.h" />
     <ClInclude Include="BRZ_Display.h" />
     <ClInclude Include="BRZ_Environment.h" />
+    <ClInclude Include="BRZ_LineElement.h" />
+    <ClInclude Include="BRZ_LineObject.h" />
+    <ClInclude Include="BRZ_LineTemplate.h" />
     <ClInclude Include="BRZ_Object.h" />
+    <ClInclude Include="BRZ_RawElement.h" />
+    <ClInclude Include="BRZ_RawGeometry.h" />
+    <ClInclude Include="BRZ_Vec2.h" />
     <ClInclude Include="BRZ_Window.h" />
     <ClInclude Include="BRZ_Time.h" />
   </ItemGroup>

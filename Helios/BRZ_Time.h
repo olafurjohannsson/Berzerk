@@ -15,13 +15,13 @@ namespace BRZ
 		{
 			Package() : poke(false), exit(NULL), cores(1), freq(1), stamp(0), frame(0), turn(0)	{    }
 
-			volatile bool		poke;
-			volatile bool *		exit;
-			unsigned int		cores;
-			unsigned __int64	freq;
-			unsigned __int64	stamp;
-			unsigned __int64	frame;
-			unsigned int		turn;
+			volatile bool				poke;
+			volatile bool *				exit;
+			volatile unsigned int		cores;
+			volatile unsigned __int64	freq;
+			volatile unsigned __int64	stamp;
+			volatile unsigned __int64	frame;
+			volatile unsigned int		turn;
 		};
 
 	public:

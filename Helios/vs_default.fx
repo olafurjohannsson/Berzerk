@@ -11,6 +11,7 @@ cbuffer MatrixBuffer
 	matrix worldMatrix;
 	matrix viewMatrix;
 	matrix projectionMatrix;
+	float4 inColour;
 };
 
 
@@ -25,6 +26,7 @@ struct VertexInputType
 struct PixelInputType
 {
     float4 position : SV_POSITION;
+	float4 colour : COLOR;
 };
 
 
@@ -41,8 +43,9 @@ PixelInputType DefaultVertexShader(VertexInputType input)
 
 	// Calculate the position of the vertex against the world, view, and projection matrices.
     output.position = mul(input.position, worldMatrix);
-//    output.position = mul(output.position, viewMatrix);
+    output.position = mul(output.position, viewMatrix);
     output.position = mul(output.position, projectionMatrix);
+	output.colour = inColour;
     
     
     return output;

@@ -6,7 +6,6 @@
 #include "BRZ_Define.h"
 #include "BRZ_Display.h"
 #include "BRZ_Window.h"
-#include "BRZ_Time.h"
 
 // #include <d3dcompiler.h>
 
@@ -20,7 +19,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	unsigned int numCPU = sysinfo.dwNumberOfProcessors;
 	logout << "Initializing Helios: " << numCPU << " processer cores." << std::endl;
 
-	BRZ::Time timer;
 
 	BRZ::Window wnd;
 	wnd.Construct(L"Berzerk InDev", 800, 600);
@@ -37,34 +35,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	
 	if (disp->Initialize(wnd.Handle()) != BRZ_SUCCESS)
 	{
-		logout << "Could not initialize display.  Exiting..." << std::endl;
+		logout << "Could not initialized display.  Exiting..." << std::endl;
 		return 0;
 	}
-
-	if (disp->GenerateGeo() != BRZ_SUCCESS)
-	{
-		logout << "Could not generate geometry.  Exiting..." << std::endl;
-		return 0;
-	}
-
-	if (disp->LoadShaders() != BRZ_SUCCESS)
-	{
-		logout << "Could not initialize shaders.  Exiting..." << std::endl;
-		return 0;
-	}
-
-	// Graphics testing:
-
-	/*
-	BRZ::D3DResource<::ID3D11Device> device;
-	::ID3D11Device * ptr = device;
-	*/
+	disp->GenerateGeometry();
+ 	disp->LockGeometry();
+	
 
 
-	float objX = 0.0f;
-	float objY = 0.0f;
-	float objR = 0.0f;
-	unsigned int acc = 0;
 
 	while (wnd.Active())
 	{
@@ -76,68 +54,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 			DispatchMessage(&message);
 		}
 
-		
-		float rateT = 5;
-		float rateR = BRZ::HALF_PI;
-
-		float xOff = timer.LastFrame();
-		xOff /= 1000.0f;
-		xOff *= rateT;
-		objX += xOff;
-		
-
-
-		acc += timer.LastFrame();
-		float rOff = timer.LastFrame();
-		rOff /= 1000.0f;
-		rOff *= rateR;
-		// objR += rOff;
-		if (acc > 1000)
-		{
-			acc -= 1000;
-			objR += (BRZ::HALF_PI / 2);
-		}
-		
-		timer.Cycle();
-		disp->Render(objX, objY, objR);
+		disp->TestQueue();
+		disp->Render();
 	}
-
-	/*
-	float base[4] = {888, 696.7, 1463.3, 480.7};
-	float unk[10] = {482, 718, 1370, 1505, 1838, 1985, 2243, 2385, 3008, 3263};
-	float err = 60;
-
-	for (int i = 0; i < 10; ++i)
-	{
-		float target = unk[i];
-		std::ostringstream out("");
-		for (int j = 0; j < 10; ++j)
-		{
-			for (int k = 0; k < 10; ++k)
-			{
-				for (int l = 0; l < 10; ++l)
-				{
-					for (int n = 0; n < 10; ++n)
-					{
-						float test = (j * base[0]) + (k * base[1]) + (l * base[2]) + (n * base[3]);
-						float margin = abs(test - target);
-						if (margin < err)
-						{
-							out << "For target [" << i << "] - (" << target << ") : (" << j << ", " << k << ", " << l << ", " << n << ") = " << test << ", err = " << margin;
-							logout << out.str() << std::endl;
-							out = std::ostringstream();
-						}
-					}
-				}
-			}
-		}
-	}
-	*/
-
-
 
 
 	logout << "shmee.  Window destroyed." << std::endl;
+	delete disp;
 
 	return 0;
 }

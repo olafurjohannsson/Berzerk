@@ -9,7 +9,28 @@
     <ClCompile Include="BRZ_Time.cpp">
       <Filter>Core Modules</Filter>
     </ClCompile>
+    <ClCompile Include="BRZ_Coord2.cpp">
+      <Filter>Core Modules\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="BRZ_Vec2.cpp">
+      <Filter>Core Modules\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="BRZ_Colour.cpp">
+      <Filter>Core Modules\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="BRZ_RawElement.cpp">
+      <Filter>Core Modules\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="BRZ_LineElement.cpp">
+      <Filter>Core Modules\Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="BRZ_Display.cpp">
+      <Filter>Core Modules\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="BRZ_LineTemplate.cpp">
+      <Filter>Core Modules\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="BRZ_RawGeometry.cpp">
       <Filter>Core Modules\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -46,6 +67,30 @@
     </ClInclude>
     <ClInclude Include="BRZ_Object.h">
       <Filter>Core Modules\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_RawGeometry.h">
+      <Filter>Core Modules\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_LineObject.h">
+      <Filter>Core Modules\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_Vec2.h">
+      <Filter>Core Modules\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_Coord2.h">
+      <Filter>Core Modules\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_Colour.h">
+      <Filter>Core Modules\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_RawElement.h">
+      <Filter>Core Modules\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_LineElement.h">
+      <Filter>Core Modules\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_LineTemplate.h">
+      <Filter>Core Modules\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
