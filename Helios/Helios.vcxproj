@@ -83,6 +83,7 @@
     <ClCompile Include="BRZ_Define.cpp" />
     <ClCompile Include="BRZ_Display.cpp" />
     <ClCompile Include="BRZ_LineElement.cpp" />
+    <ClCompile Include="BRZ_LineObject.cpp" />
     <ClCompile Include="BRZ_LineTemplate.cpp" />
     <ClCompile Include="BRZ_RawElement.cpp" />
     <ClCompile Include="BRZ_RawGeometry.cpp" />

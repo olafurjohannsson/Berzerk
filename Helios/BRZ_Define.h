@@ -53,7 +53,6 @@ namespace BRZ
 	class LineElement;
 
 	class LineObject;
-	class LineReference;
 	
 
 	class RawElement;

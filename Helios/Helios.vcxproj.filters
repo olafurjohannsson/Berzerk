@@ -33,6 +33,9 @@
     <ClCompile Include="BRZ_RawGeometry.cpp">
       <Filter>Core Modules\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="BRZ_LineObject.cpp">
+      <Filter>Core Modules\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core Modules">

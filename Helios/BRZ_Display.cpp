@@ -83,6 +83,53 @@ BRZRESULT BRZ::Display::TestQueue()
 }
 
 
+BRZRESULT BRZ::Display::Link(BRZ::LineObject & A_obj, const BRZSTRING & A_name)
+{
+	BRZ::prefix = "[Display::Link]: ";
+
+
+	if (A_obj.display != NULL)
+	{
+		BRZ::Log("Error: Object previously linked.");
+		return BRZ_FAILURE;
+	}
+
+
+	for (unsigned int i = 0; i < obj_maxTemplates; ++i)
+	{
+		if (obj_templates[i].name == A_name)
+		{
+			const BRZ::LineTemplate * temp = &obj_templates[i];
+
+			if (temp->numElements == 0)
+				return BRZ_SUCCESS;
+
+			A_obj.numElements = temp->numElements;
+			A_obj.elements = new BRZ::LineObject::Reference[temp->numElements];
+
+			for (unsigned int j = 0; j < temp->numElements; ++j)
+			{
+				const BRZ::LineElement * elem = &obj_elements[temp->idElements[j]];
+				A_obj.elements[j].base = elem;
+				A_obj.elements[j].standard = true;
+				A_obj.elements[j].colour = elem->colour;
+				A_obj.elements[j].rotation = 0.0f;
+				A_obj.elements[j].offset = elem->localPos;
+			}
+
+			return BRZ_SUCCESS;
+		}
+	}
+
+	std::string msg = "Could not find object (";
+	std::string msg_end = ") for linking.";
+
+	BRZ::Log(msg + BRZ::Narrow(A_name) + msg_end);
+
+	return BRZ_FAILURE;
+}
+
+
 BRZRESULT BRZ::Display::Queue(const BRZ::LineElement & A_elem, const DirectX::XMFLOAT4X4 & A_trans, const BRZ::Colour & A_col)
 {
 	// Set up testing variables:
@@ -297,6 +344,7 @@ BRZRESULT BRZ::Display::BakeGeometry(const BRZ::RawGeometry & A_geo, const BRZST
 		++obj_usedElements;
 	}
 
+	temp->name = A_name;
 	++obj_usedTemplates;
 
 	return BRZ_SUCCESS;
