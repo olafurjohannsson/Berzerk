@@ -6,6 +6,8 @@
 #include "BRZ_Define.h"
 #include "BRZ_Display.h"
 #include "BRZ_Window.h"
+#include "BRZ_LineObject.h"
+#include "BRZ_Vec2.h"
 
 // #include <d3dcompiler.h>
 
@@ -42,6 +44,23 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
  	disp->LockGeometry();
 	
 
+	
+
+	BRZ::LineObject obj;
+	BRZ::Vec2		pos(0.0f, 0.0f);
+	BRZ::Vec2		lPos(0.0f, 0.0f);
+	float			rot = 0.0f;
+	float			mod = 1.0f;
+	unsigned int	max = 100;
+	unsigned int	now = 0;
+
+	float			lMod = 1.0f;
+	unsigned int	lMax = 30;
+	unsigned int	lNow = 0;
+
+
+	disp->Link(obj, L"craft");
+	obj.elements[1].standard = false;
 
 
 	while (wnd.Active())
@@ -53,8 +72,30 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 			TranslateMessage(&message);
 			DispatchMessage(&message);
 		}
+		
+		// Update object position:
+		if (now > max)
+		{
+			mod *= -1.0f;
+			now -= max;
+		}
+		else
+			++now;
 
-		disp->TestQueue();
+		if (lNow > lMax)
+		{
+			lMod *= -1.0f;
+			lNow -= lMax;
+		}
+		else
+			++lNow;
+
+		pos.x += mod;
+		lPos.x += lMod;
+
+		obj.elements[1].offset = lPos;
+		obj.Render(pos, rot);
+
 		disp->Render();
 	}
 

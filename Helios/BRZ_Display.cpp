@@ -100,6 +100,7 @@ BRZRESULT BRZ::Display::Link(BRZ::LineObject & A_obj, const BRZSTRING & A_name)
 		if (obj_templates[i].name == A_name)
 		{
 			const BRZ::LineTemplate * temp = &obj_templates[i];
+			A_obj.display = this;
 
 			if (temp->numElements == 0)
 				return BRZ_SUCCESS;
@@ -846,8 +847,8 @@ BRZRESULT BRZ::Display::InitD3DView()
 
 	// Setup the raster description which will determine how and what polygons will be drawn.
 	BRZ::ZeroMem(&rasterDesc);
-	rasterDesc.AntialiasedLineEnable = true;
-	rasterDesc.CullMode = D3D11_CULL_NONE;
+	rasterDesc.AntialiasedLineEnable = false;
+	rasterDesc.CullMode = D3D11_CULL_BACK;
 	rasterDesc.DepthBias = 0;
 	rasterDesc.DepthBiasClamp = 0.0f;
 	rasterDesc.DepthClipEnable = true;

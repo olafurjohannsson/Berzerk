@@ -33,7 +33,8 @@ namespace BRZ
 	public:
 		BRZRESULT Render(const BRZ::Vec2 & position, float rotation);
 
-	private:
+		// NOTE: PUBLIC FOR TESTING PURPOSES ONLY
+	public:
 		BRZ::Display *		display;
 		Reference *			elements;
 		unsigned int		numElements;
