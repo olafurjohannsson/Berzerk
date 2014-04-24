@@ -36,6 +36,15 @@
     <ClCompile Include="BRZ_LineObject.cpp">
       <Filter>Core Modules\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="BRZ_InputCore.cpp">
+      <Filter>Core Modules\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="BRZ_KeyState.cpp">
+      <Filter>Core Modules\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="BRZ_BindingModule.cpp">
+      <Filter>Core Modules\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core Modules">
@@ -52,6 +61,9 @@
     </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{ae81d167-db45-43cf-a975-2ac163dffa7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Modules\Input">
+      <UniqueIdentifier>{a6f625bd-e9bc-42b7-bbd1-6f4a0108a0fc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +106,18 @@
     </ClInclude>
     <ClInclude Include="BRZ_LineTemplate.h">
       <Filter>Core Modules\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_InputCore.h">
+      <Filter>Core Modules\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_Input.h">
+      <Filter>Core Modules\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_BindingModule.h">
+      <Filter>Core Modules\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_KeyState.h">
+      <Filter>Core Modules\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -78,10 +78,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BRZ_BindingModule.cpp" />
     <ClCompile Include="BRZ_Colour.cpp" />
     <ClCompile Include="BRZ_Coord2.cpp" />
     <ClCompile Include="BRZ_Define.cpp" />
     <ClCompile Include="BRZ_Display.cpp" />
+    <ClCompile Include="BRZ_InputCore.cpp" />
+    <ClCompile Include="BRZ_KeyState.cpp" />
     <ClCompile Include="BRZ_LineElement.cpp" />
     <ClCompile Include="BRZ_LineObject.cpp" />
     <ClCompile Include="BRZ_LineTemplate.cpp" />
@@ -93,11 +96,15 @@
     <ClCompile Include="Startup.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BRZ_BindingModule.h" />
     <ClInclude Include="BRZ_Colour.h" />
     <ClInclude Include="BRZ_Coord2.h" />
     <ClInclude Include="BRZ_Define.h" />
     <ClInclude Include="BRZ_Display.h" />
     <ClInclude Include="BRZ_Environment.h" />
+    <ClInclude Include="BRZ_Input.h" />
+    <ClInclude Include="BRZ_InputCore.h" />
+    <ClInclude Include="BRZ_KeyState.h" />
     <ClInclude Include="BRZ_LineElement.h" />
     <ClInclude Include="BRZ_LineObject.h" />
     <ClInclude Include="BRZ_LineTemplate.h" />
