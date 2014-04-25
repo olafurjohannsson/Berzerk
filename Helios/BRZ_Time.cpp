@@ -39,30 +39,22 @@
 
 
 BRZ::Time::Time() :
-	worker(NULL),
-	workerID(0),
-	data(NULL)
+	cores(1),
+	freq(1),
+	stamp(0),
+	frame(0),
+	turn(0)
 {
-	data = new BRZ::Time::Package();
 	LARGE_INTEGER holder;
 
 	if (!::QueryPerformanceFrequency(&holder))
 		::MessageBox(NULL, L"Performance Timer unavailable!", L"Fatal Error", MB_OK);
 	else
-		this->data->freq = holder.QuadPart;
+		this->freq = holder.QuadPart;
 
 	SYSTEM_INFO sysinfo;
 	GetSystemInfo( &sysinfo );
-	this->data->cores = sysinfo.dwNumberOfProcessors;
-
-	worker = ::CreateThread(NULL, 0, &BRZ::Time::WorkerProc, (LPVOID)data, 0, (LPDWORD)&workerID);
-	// Set the thread affinity mask for only core 2 (Note that one should implement behaviour based
-	//	on how many cores the processor has; different behaviour will be needed on single core machines
-	// ~ a non-threaded solution would work just fine there.
-	if (::SetThreadAffinityMask(worker, 1<<1) == 0)
-	{
-		::MessageBox(NULL, L"Performance Timer Thread Affinity Error!", L"Fatal Error", MB_OK);
-	}
+	this->cores = sysinfo.dwNumberOfProcessors;
 
 	this->Cycle();
 }
@@ -70,8 +62,6 @@ BRZ::Time::Time() :
 
 BRZ::Time::~Time()
 {
-	*data->exit = true;
-	delete data;
 }
 
 
@@ -79,17 +69,15 @@ BRZ::Time::~Time()
 
 unsigned int BRZ::Time::TotalFrames() const
 {
-	return data->turn;
+	return turn;
 }
 
 
 unsigned int BRZ::Time::LastFrame() const
 {
 	// Check if the cycle is definitely done:
-	if (data->poke)
-		return -1;
 
-	unsigned __int64	ms = data->frame / (data->freq / 1000);
+	unsigned __int64	ms = frame / (freq / 1000);
 	LARGE_INTEGER		holder;
 
 	holder.QuadPart = ms;
@@ -97,47 +85,23 @@ unsigned int BRZ::Time::LastFrame() const
 }
 
 
-DWORD WINAPI BRZ::Time::WorkerProc(LPVOID A_arg)
-{
-	BRZ::Time::Package * pak = (BRZ::Time::Package *)A_arg;
-	bool * exit = new bool(false);
-	pak->exit = exit;
-
-	while (!*exit)
-	{
-		if (!pak->poke)
-			continue;
-		else
-		{
-			// The timer has been poked to a new frame, update the frame number (turn), the timing of 
-			//	the last frame (frame) and the total timestamp (stamp).
-			unsigned __int64	ticks = 0;
-			LARGE_INTEGER		holder;
-
-			::QueryPerformanceCounter(&holder);
-			ticks = holder.QuadPart;
-
-			ticks = ticks - pak->stamp;
-
-			if (pak->stamp == 0)
-				pak->frame = 0;
-			else
-				pak->frame = ticks;
-
-			pak->stamp += ticks;
-			++pak->turn;
-			pak->poke = false;
-		}
-	}
-	delete exit;
-
-	return 0;
-}
-
-
 BRZRESULT BRZ::Time::Cycle()
 {
-	data->poke = true;
+	unsigned __int64	ticks = 0;
+	LARGE_INTEGER		holder;
+
+	::QueryPerformanceCounter(&holder);
+	ticks = holder.QuadPart;
+
+	ticks = ticks - stamp;
+
+	if (stamp == 0)
+		frame = 0;
+	else
+		frame = ticks;
+
+	stamp += ticks;
+	++turn;
 
 	return BRZ_SUCCESS;
 }

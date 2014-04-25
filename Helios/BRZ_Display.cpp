@@ -38,6 +38,71 @@ namespace BRZ
 }
 
 
+BRZRESULT BRZ::Display::SetDataDirectory(const BRZSTRING & A_dir)
+{
+	cache_dir = A_dir;
+	return BRZ_SUCCESS;
+}
+
+
+BRZRESULT BRZ::Display::LoadGeometry(const BRZSTRING & A_file, const BRZSTRING & A_name)
+{
+	BRZ::RawGeometry	geo;
+
+	// Set up testing variables:
+	BRZ::prefix = "[Display::LoadGeometry]: ";
+
+	BRZSTRING file = cache_dir + A_file;
+
+	if (cache_importer.Import(file, geo) != BRZ_SUCCESS)
+	{
+		BRZ::Log("Failed to import ASE file.");
+		return BRZ_FAILURE;
+	}
+
+	return this->BakeGeometry(geo, A_name);
+}
+
+
+BRZRESULT BRZ::Display::GenerateGrid()
+{
+	BRZ::RawGeometry	geo;
+
+	geo.count = 1;
+	geo.elem = new BRZ::RawElement[1];
+
+	geo.elem[0].colour = BRZ::Colour(0.0f, 0.0f, 0.0f, 0.5f);
+	geo.elem[0].AllocPoints(52);
+	geo.elem[0].AllocLines(26);
+
+	float startX = -350.0f;
+	float modX = 50.0f;
+
+	for (unsigned int i = 0; i < 15; ++i)
+	{
+		geo.elem[0].points[i * 2] = BRZ::Vec2(startX + (i * modX), 295.0f);
+		geo.elem[0].points[(i * 2) + 1] = BRZ::Vec2(startX + (i * modX), -295.0f);
+		geo.elem[0].lines[i] = BRZ::Coord2(i * 2, (i * 2) + 1);
+	}
+
+	float startY = -250.0f;
+	float modY = 50.0f;
+
+	for (unsigned int i = 15; i < 26; ++i)
+	{
+		float offset = i - 15.0f;
+
+		geo.elem[0].points[i * 2] = BRZ::Vec2(395.0f, startY + (offset * modY));
+		geo.elem[0].points[(i * 2) + 1] = BRZ::Vec2(-395.0f, startY + (offset * modY));
+		geo.elem[0].lines[i] = BRZ::Coord2(i * 2, (i * 2) + 1);
+	}
+
+	this->BakeGeometry(geo, L"grid");
+
+	return BRZ_SUCCESS;
+}
+
+
 BRZRESULT BRZ::Display::GenerateGeometry()
 {
 	BRZ::RawGeometry	geo;
@@ -66,6 +131,28 @@ BRZRESULT BRZ::Display::GenerateGeometry()
 	geo.elem[1].lines[2] = BRZ::Coord2(2, 0);
 
 	this->BakeGeometry(geo, L"craft");
+
+	BRZ::RawGeometry	box;
+	box.count = 1;
+	box.elem = new BRZ::RawElement[1];
+	BRZ::RawElement & elem = box.elem[0];
+
+	elem.colour = BRZ::Colour(1.0f, 1.0f, 0.0f, 1.0f);
+	elem.AllocPoints(4);
+	elem.AllocLines(4);
+
+	elem.points[0] = BRZ::Vec2(0.0f, 0.0f);
+	elem.points[1] = BRZ::Vec2(0.0f, 50.0f);
+	elem.points[2] = BRZ::Vec2(50.0f, 50.0f);
+	elem.points[3] = BRZ::Vec2(50.0f, 0.0f);
+
+	elem.lines[0] = BRZ::Coord2(0, 1);
+	elem.lines[1] = BRZ::Coord2(1, 2);
+	elem.lines[2] = BRZ::Coord2(2, 3);
+	elem.lines[3] = BRZ::Coord2(3, 0);
+
+	this->BakeGeometry(box, L"box");
+
 
 	return BRZ_SUCCESS;
 }
@@ -387,17 +474,18 @@ BRZRESULT BRZ::Display::Render()
 	// For each render ticket in the queue, draw:
 	for (unsigned int i = 0; i < out_usedTickets; ++i)
 	{
+		unsigned int j = i;//(out_usedTickets - 1) - i;
 		// Set up the shader constant buffer:
 		result = d3d_context->Map(out_shaderInput, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 		if (!BRZ::Test("Failed to map shader constant buffer."))
 			return BRZ_FAILURE;
 
 		dataPtr = (BRZ::ShaderConstants *)mappedResource.pData;
-		BRZMATRIX lWorld = DirectX::XMLoadFloat4x4(&out_queue[i].transform);
+		BRZMATRIX lWorld = DirectX::XMLoadFloat4x4(&out_queue[j].transform);
 		dataPtr->world = DirectX::XMMatrixTranspose(lWorld);
 		dataPtr->view = tView;
 		dataPtr->proj = tProj;
-		BRZ::CopyMem((float *)&dataPtr->col, out_queue[i].colour.ptr, 4);
+		BRZ::CopyMem((float *)&dataPtr->col, out_queue[j].colour.ptr, 4);
 		
 		d3d_context->Unmap(out_shaderInput, 0);
 		d3d_context->VSSetConstantBuffers(0, 1, &out_shaderInput);
@@ -408,7 +496,7 @@ BRZRESULT BRZ::Display::Render()
 		d3d_context->PSSetShader(out_pixelShader, NULL, 0);
 
 		// Draw lines:
-		d3d_context->DrawIndexed(out_queue[i].idxCount, out_queue[i].idxOffset, 0);
+		d3d_context->DrawIndexed(out_queue[j].idxCount, out_queue[j].idxOffset, 0);
 	}
 
 
@@ -746,6 +834,7 @@ BRZRESULT BRZ::Display::InitD3DView()
 	D3D11_DEPTH_STENCIL_VIEW_DESC			depthStencilViewDesc;
 	D3D11_RASTERIZER_DESC					rasterDesc;
 	D3D11_VIEWPORT							viewport;
+	D3D11_BLEND_DESC						blendDesc;
 	unsigned int							screenWidth = ::GetSystemMetrics(SM_CXSCREEN);
 	unsigned int							screenHeight = ::GetSystemMetrics(SM_CYSCREEN);
 
@@ -799,10 +888,10 @@ BRZRESULT BRZ::Display::InitD3DView()
 	// Create the depth stencil state from description:
 	BRZ::ZeroMem(&depthStencilDesc);
 
-	depthStencilDesc.DepthEnable = true;
+	depthStencilDesc.DepthEnable = false;
 	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
-	depthStencilDesc.StencilEnable = true;
+	depthStencilDesc.StencilEnable = false;
 	depthStencilDesc.StencilReadMask = 0xFF;
 	depthStencilDesc.StencilWriteMask = 0xFF;
 
@@ -885,6 +974,28 @@ BRZRESULT BRZ::Display::InitD3DView()
 
 	// Create the viewport.
     d3d_context->RSSetViewports(1, &viewport);
+
+	// Set up the blending state for alpha blend enabling:
+	BRZ::ZeroMem(&blendDesc);
+
+	// Create an alpha enabled blend state description.
+	blendDesc.RenderTarget[0].BlendEnable = TRUE;
+    blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+    blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+    blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
+    blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
+    blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    blendDesc.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+
+	// Create the blend state using the description.
+	result = d3d_device->CreateBlendState(&blendDesc, &d3d_blendState);
+	if (!BRZ::Test("Failed to create alpha shading blend state."))
+		return BRZ_FAILURE;
+
+	float	blend[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+	d3d_context->OMSetBlendState(d3d_blendState, blend, 0xFFFFFFFF);
 
 	return BRZ_SUCCESS;
 }
@@ -991,6 +1102,8 @@ BRZ::Display::Display(std::ofstream & A_log) :
 	out_maxTickets(0),
 	out_usedTickets(0),
 	out_queue(NULL),
+	cache_dir(L""),
+	cache_importer(A_log),
 	cache_maxPoints(0),
 	cache_maxLines(0),
 	cache_usedPoints(0),

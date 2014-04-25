@@ -78,6 +78,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BRZ_ASEImport.cpp" />
     <ClCompile Include="BRZ_BindingModule.cpp" />
     <ClCompile Include="BRZ_Colour.cpp" />
     <ClCompile Include="BRZ_Coord2.cpp" />
@@ -96,6 +97,7 @@
     <ClCompile Include="Startup.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BRZ_ASEImport.h" />
     <ClInclude Include="BRZ_BindingModule.h" />
     <ClInclude Include="BRZ_Colour.h" />
     <ClInclude Include="BRZ_Coord2.h" />

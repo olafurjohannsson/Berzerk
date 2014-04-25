@@ -7,6 +7,7 @@
 #include "BRZ_Define.h"
 #include <Windows.h>
 
+#include "BRZ_ASEImport.h"
 #include "BRZ_Colour.h"
 #include "BRZ_Coord2.h"
 
@@ -102,7 +103,8 @@ namespace BRZ
 	public:
 		BRZRESULT Initialize(HWND window);
 
-		BRZRESULT LoadGeometry(const BRZSTRING & file);
+		BRZRESULT SetDataDirectory(const BRZSTRING & dir);
+		BRZRESULT LoadGeometry(const BRZSTRING & file, const BRZSTRING & name);
 		BRZRESULT BakeGeometry(const BRZ::RawGeometry & geometry, const BRZSTRING & name);
 		BRZRESULT LockGeometry();
 
@@ -112,6 +114,7 @@ namespace BRZ
 
 		// For testing purposes:
 		BRZRESULT GenerateGeometry();
+		BRZRESULT GenerateGrid();
 		BRZRESULT TestQueue();
 
 	protected:
@@ -146,6 +149,7 @@ namespace BRZ
 		BRZ::D3DResource<ID3D11DepthStencilState>	d3d_depthStencilState;
 		BRZ::D3DResource<ID3D11DepthStencilView>	d3d_depthStencilView;
 		BRZ::D3DResource<ID3D11RasterizerState>		d3d_rasterState;
+		BRZ::D3DResource<ID3D11BlendState>			d3d_blendState;
 
 		// Direct3D objects [Pipeline]:
 		// BRZ::ShaderConstants					out_constants;
@@ -161,6 +165,8 @@ namespace BRZ
 
 
 		// Geometry cache objects:
+		BRZSTRING			cache_dir;
+		BRZ::ASEImport		cache_importer;
 		unsigned int		cache_maxPoints;
 		unsigned int		cache_maxLines;
 		unsigned int		cache_usedPoints;
