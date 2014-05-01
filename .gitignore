@@ -11,8 +11,8 @@
 *
 !Helios/
 !Helios/Data/
-!Helios/Release/
-!Helios/Debug/
+!Release/
+!Debug/
 
 !*.cpp
 !*.h
