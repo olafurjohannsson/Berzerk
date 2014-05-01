@@ -48,6 +48,12 @@
     <ClCompile Include="BRZ_ASEImport.cpp">
       <Filter>Core Modules\Graphics\Geometry Import</Filter>
     </ClCompile>
+    <ClCompile Include="BRZ_AsteroidGen.cpp">
+      <Filter>Core Modules\Graphics\Geometry Import</Filter>
+    </ClCompile>
+    <ClCompile Include="BRZ_Config.cpp">
+      <Filter>Core Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core Modules">
@@ -127,6 +133,12 @@
     </ClInclude>
     <ClInclude Include="BRZ_ASEImport.h">
       <Filter>Core Modules\Graphics\Geometry Import</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_AsteroidGen.h">
+      <Filter>Core Modules\Graphics\Geometry Import</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_Config.h">
+      <Filter>Core Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,27 @@
 #include <Windows.h>
 
 
+void BRZ::TrimString(BRZSTRING & A_str)
+{
+	if (A_str.empty())
+		return;
+
+	const BRZSTRING		whitespace = L"\t\n ";
+
+	BRZSTRING::size_type	trimStart = A_str.find_first_not_of(whitespace);
+	BRZSTRING::size_type	trimEnd = A_str.find_last_not_of(whitespace);
+
+	if (trimStart == BRZSTRING::npos)
+	{
+		A_str = L"";
+		return;
+	}
+
+	A_str = A_str.substr(trimStart, (trimEnd + 1) - trimStart);
+	return;
+}
+
+
 BRZSTRING BRZ::Widen(const std::string & A_src)
 {
 	// Allocate the buffer, and set the last character to the null terminator:

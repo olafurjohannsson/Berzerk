@@ -1,6 +1,7 @@
 
 #include "BRZ_Display.h"
 
+#include "BRZ_AsteroidGen.h"
 #include "BRZ_Colour.h"
 #include "BRZ_LineElement.h"
 #include "BRZ_LineObject.h"
@@ -61,6 +62,16 @@ BRZRESULT BRZ::Display::LoadGeometry(const BRZSTRING & A_file, const BRZSTRING &
 	}
 
 	return this->BakeGeometry(geo, A_name);
+}
+
+
+BRZRESULT BRZ::Display::GenerateAsteroids()
+{
+	BRZ::AsteroidGen gen;
+	BRZ::RawGeometry geo;
+
+	gen.MakeRock(geo);
+	return this->BakeGeometry(geo, L"rock");
 }
 
 

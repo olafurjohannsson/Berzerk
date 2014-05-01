@@ -1,11 +1,12 @@
 
 #include <Windows.h>
-#include <fstream>
-#include <sstream>
+// #include <ctime>
+// #include <cstdlib>
 
 #include "BRZ_Define.h"
 
 #include "BRZ_BindingModule.h"
+#include "BRZ_Config.h"
 #include "BRZ_Display.h"
 #include "BRZ_InputCore.h"
 #include "BRZ_LineObject.h"
@@ -91,24 +92,33 @@ BRZRESULT BRZ::Environment::ResolveInput(BRZ::InputEvent A_event)
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 {
+	srand(::GetTickCount());
+
 	std::ofstream logout("Log_Helios.txt");
 
 	SYSTEM_INFO sysinfo;
 	GetSystemInfo( &sysinfo );
 
+	// Get number of cores, check whether DirectX Math is supported by the processor:
 	unsigned int numCPU = sysinfo.dwNumberOfProcessors;
 	logout << "Initializing Helios: " << numCPU << " processer cores." << std::endl;
-
-	BRZ::Window wnd;
-	wnd.Construct(L"Berzerk InDev", 800, 600);
-
-	logout << "window created." << std::endl;
-
 	if (!DirectX::XMVerifyCPUSupport())
 	{
 		logout << "DirectXMath CPU operations not supported.  Failure..." << std::endl;
 		return 0;
 	}
+
+	BRZ::Window		wnd;
+	wnd.Construct(L"Berzerk InDev", 800, 600);
+	logout << "Window created." << std::endl;
+
+
+	BRZ::Config		cfg(logout);
+	cfg.LoadFile(L"HeliosConfig.cfg");
+	logout << "Config string: " << BRZ::Narrow(cfg.ReadString(L"string")) << std::endl;
+	logout << "Bad string: " << BRZ::Narrow(cfg.ReadString(L"varThatDoesNotExist")) << std::endl;
+
+	
 
 	BRZ::Display * disp = new BRZ::Display(logout);
 	
@@ -125,6 +135,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
 	// disp->GenerateGeometry();
 	disp->GenerateGrid();
+	disp->GenerateAsteroids();
  	disp->LockGeometry();
 
 
@@ -155,6 +166,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	// Test Grid:
 	BRZ::LineObject	grid;
 	disp->Link(grid, L"grid");
+	BRZ::LineObject rock;
+	disp->Link(rock, L"rock");
+
+	// Test Asteroid Gen:
+
 
 	BRZ::Time *	localTime = new BRZ::Time();
 	while (wnd.Active())
@@ -171,6 +187,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
 		actor.Update(localTime->LastFrame());
 		actor.obj.Render(actor.pos, actor.rot);
+		rock.Render(BRZ::Vec2(0.0f, 50.0f), 0);
 		grid.Render(BRZ::Vec2(), 0);
 
 		input->Cycle();
@@ -183,7 +200,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	delete input;
 
 
-	logout << "shmee.  Window destroyed." << std::endl;
+	logout << "Exiting..." << std::endl;
 	delete disp;
 
 	return 0;

@@ -75,6 +75,7 @@ namespace BRZ
 	// String utility functions:
 	BRZSTRING		Widen(const std::string & str);
 	std::string		Narrow(const BRZSTRING & str);
+	void			TrimString(BRZSTRING & string);
 
 	// General memory utility functions:
 	void ZeroMemBytes(BRZBYTE * destination, unsigned int size);
