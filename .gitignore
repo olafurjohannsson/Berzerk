@@ -5,3 +5,22 @@
 *.txt
 *.idb
 *.pdb
+
+
+#ignore everything, then whitelist as necessary:
+*
+!Helios/
+!Helios/Data/
+!Helios/Release/
+!Helios/Debug/
+
+!*.cpp
+!*.h
+!*.sln
+!*.suo
+!*.md
+!*.vcxproj
+!*.filters
+!*.fx
+!*.ASE
+!*.cfg
