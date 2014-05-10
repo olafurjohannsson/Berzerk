@@ -78,14 +78,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BRZ_Actor.cpp" />
     <ClCompile Include="BRZ_ASEImport.cpp" />
+    <ClCompile Include="BRZ_Asset.cpp" />
     <ClCompile Include="BRZ_AsteroidGen.cpp" />
     <ClCompile Include="BRZ_BindingModule.cpp" />
     <ClCompile Include="BRZ_Colour.cpp" />
     <ClCompile Include="BRZ_Config.cpp" />
     <ClCompile Include="BRZ_Coord2.cpp" />
+    <ClCompile Include="BRZ_Craft.cpp" />
     <ClCompile Include="BRZ_Define.cpp" />
+    <ClCompile Include="BRZ_DiskStream.cpp" />
     <ClCompile Include="BRZ_Display.cpp" />
+    <ClCompile Include="BRZ_Environment.cpp" />
     <ClCompile Include="BRZ_InputCore.cpp" />
     <ClCompile Include="BRZ_KeyState.cpp" />
     <ClCompile Include="BRZ_LineElement.cpp" />
@@ -93,30 +98,39 @@
     <ClCompile Include="BRZ_LineTemplate.cpp" />
     <ClCompile Include="BRZ_RawElement.cpp" />
     <ClCompile Include="BRZ_RawGeometry.cpp" />
+    <ClCompile Include="BRZ_RigidObject.cpp" />
+    <ClCompile Include="BRZ_Skeleton.cpp" />
     <ClCompile Include="BRZ_Time.cpp" />
     <ClCompile Include="BRZ_Vec2.cpp" />
     <ClCompile Include="BRZ_Window.cpp" />
     <ClCompile Include="Startup.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BRZ_Actor.h" />
     <ClInclude Include="BRZ_ASEImport.h" />
+    <ClInclude Include="BRZ_Asset.h" />
     <ClInclude Include="BRZ_AsteroidGen.h" />
     <ClInclude Include="BRZ_BindingModule.h" />
     <ClInclude Include="BRZ_Colour.h" />
     <ClInclude Include="BRZ_Config.h" />
     <ClInclude Include="BRZ_Coord2.h" />
+    <ClInclude Include="BRZ_Craft.h" />
     <ClInclude Include="BRZ_Define.h" />
+    <ClInclude Include="BRZ_DiskStream.h" />
     <ClInclude Include="BRZ_Display.h" />
     <ClInclude Include="BRZ_Environment.h" />
+    <ClInclude Include="BRZ_GameDefine.h" />
     <ClInclude Include="BRZ_Input.h" />
     <ClInclude Include="BRZ_InputCore.h" />
     <ClInclude Include="BRZ_KeyState.h" />
     <ClInclude Include="BRZ_LineElement.h" />
     <ClInclude Include="BRZ_LineObject.h" />
     <ClInclude Include="BRZ_LineTemplate.h" />
-    <ClInclude Include="BRZ_Object.h" />
     <ClInclude Include="BRZ_RawElement.h" />
     <ClInclude Include="BRZ_RawGeometry.h" />
+    <ClInclude Include="BRZ_RigidObject.h" />
+    <ClInclude Include="BRZ_Scene.h" />
+    <ClInclude Include="BRZ_Skeleton.h" />
     <ClInclude Include="BRZ_Vec2.h" />
     <ClInclude Include="BRZ_Window.h" />
     <ClInclude Include="BRZ_Time.h" />

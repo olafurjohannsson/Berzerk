@@ -7,7 +7,7 @@ const signed int	BRZ::Config::BAD_INT		= 0;
 const float			BRZ::Config::BAD_FLOAT		= 0.0f;
 
 
-const float & BRZ::Config::ReadFloat(const BRZSTRING & A_var)
+const float & BRZ::Config::ReadFloat(const BRZSTRING & A_var) const
 {
 	auto result = fltVars.find(A_var);
 
@@ -18,7 +18,7 @@ const float & BRZ::Config::ReadFloat(const BRZSTRING & A_var)
 }
 
 
-const signed int & BRZ::Config::ReadInt(const BRZSTRING & A_var)
+const signed int & BRZ::Config::ReadInt(const BRZSTRING & A_var) const
 {
 	auto result = intVars.find(A_var);
 
@@ -29,7 +29,7 @@ const signed int & BRZ::Config::ReadInt(const BRZSTRING & A_var)
 }
 
 
-const BRZSTRING & BRZ::Config::ReadString(const BRZSTRING & A_var)
+const BRZSTRING & BRZ::Config::ReadString(const BRZSTRING & A_var) const
 {
 	auto result = strVars.find(A_var);
 

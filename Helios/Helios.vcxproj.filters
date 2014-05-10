@@ -45,14 +45,35 @@
     <ClCompile Include="BRZ_RawGeometry.cpp">
       <Filter>Core Modules\Graphics\Geometry Import</Filter>
     </ClCompile>
-    <ClCompile Include="BRZ_ASEImport.cpp">
-      <Filter>Core Modules\Graphics\Geometry Import</Filter>
-    </ClCompile>
     <ClCompile Include="BRZ_AsteroidGen.cpp">
       <Filter>Core Modules\Graphics\Geometry Import</Filter>
     </ClCompile>
     <ClCompile Include="BRZ_Config.cpp">
       <Filter>Core Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="BRZ_Environment.cpp">
+      <Filter>Game Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="BRZ_DiskStream.cpp">
+      <Filter>Core Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="BRZ_ASEImport.cpp">
+      <Filter>Game Modules\Asset Module</Filter>
+    </ClCompile>
+    <ClCompile Include="BRZ_Asset.cpp">
+      <Filter>Game Modules\Asset Module</Filter>
+    </ClCompile>
+    <ClCompile Include="BRZ_RigidObject.cpp">
+      <Filter>Game Modules\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="BRZ_Skeleton.cpp">
+      <Filter>Game Modules\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="BRZ_Actor.cpp">
+      <Filter>Game Modules\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="BRZ_Craft.cpp">
+      <Filter>Game Modules\Scene\Specific Actors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -65,9 +86,6 @@
     <Filter Include="Core Modules\Math">
       <UniqueIdentifier>{cceb4f99-b89e-42a5-8aee-1f6978cf701f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core Modules\Scene">
-      <UniqueIdentifier>{ea531aa7-c5e3-44ae-8d78-e0200a007568}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{ae81d167-db45-43cf-a975-2ac163dffa7a}</UniqueIdentifier>
     </Filter>
@@ -77,11 +95,20 @@
     <Filter Include="Core Modules\Graphics\Geometry Import">
       <UniqueIdentifier>{7ff08d21-ef3f-4b34-a818-830781520ce2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game Modules">
+      <UniqueIdentifier>{e2446f3c-ed82-4048-a8d6-c81d24ecddb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Modules\Scene">
+      <UniqueIdentifier>{ea531aa7-c5e3-44ae-8d78-e0200a007568}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Modules\Asset Module">
+      <UniqueIdentifier>{5eeb2a86-0eb2-4121-8ac2-1e2d1dd88e52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Modules\Scene\Specific Actors">
+      <UniqueIdentifier>{04245034-2c33-424d-a8b0-4c95c9a81d5a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BRZ_Environment.h">
-      <Filter>Core Modules</Filter>
-    </ClInclude>
     <ClInclude Include="BRZ_Window.h">
       <Filter>Core Modules</Filter>
     </ClInclude>
@@ -91,9 +118,6 @@
     </ClInclude>
     <ClInclude Include="BRZ_Display.h">
       <Filter>Core Modules\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="BRZ_Object.h">
-      <Filter>Core Modules\Scene</Filter>
     </ClInclude>
     <ClInclude Include="BRZ_LineObject.h">
       <Filter>Core Modules\Graphics</Filter>
@@ -131,14 +155,41 @@
     <ClInclude Include="BRZ_RawElement.h">
       <Filter>Core Modules\Graphics\Geometry Import</Filter>
     </ClInclude>
-    <ClInclude Include="BRZ_ASEImport.h">
-      <Filter>Core Modules\Graphics\Geometry Import</Filter>
-    </ClInclude>
     <ClInclude Include="BRZ_AsteroidGen.h">
       <Filter>Core Modules\Graphics\Geometry Import</Filter>
     </ClInclude>
     <ClInclude Include="BRZ_Config.h">
       <Filter>Core Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_Environment.h">
+      <Filter>Game Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_Scene.h">
+      <Filter>Game Modules\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_Actor.h">
+      <Filter>Game Modules\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_GameDefine.h">
+      <Filter>Game Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_DiskStream.h">
+      <Filter>Core Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_Asset.h">
+      <Filter>Game Modules\Asset Module</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_ASEImport.h">
+      <Filter>Game Modules\Asset Module</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_Skeleton.h">
+      <Filter>Game Modules\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_RigidObject.h">
+      <Filter>Game Modules\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_Craft.h">
+      <Filter>Game Modules\Scene\Specific Actors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

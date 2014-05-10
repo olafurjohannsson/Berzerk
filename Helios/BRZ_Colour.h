@@ -21,6 +21,11 @@ namespace BRZ
 		float & operator[](unsigned int index);
 
 	public:
+		// DiskStream utility functions:
+		BRZRESULT		Unpack(BRZ::DiskStream & inputFile);
+		unsigned int	Pack(BRZ::DiskStream & outputFile) const;
+
+	public:
 		union
 		{
 			float ptr[4];

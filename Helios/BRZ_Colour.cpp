@@ -1,7 +1,37 @@
 
 #include "BRZ_Colour.h"
 
+#include "BRZ_DiskStream.h"
+
 float BRZ::Colour::BAD_INDEX	= -1.0f;
+
+
+BRZRESULT BRZ::Colour::Unpack(BRZ::DiskStream & A_in)
+{
+	if (A_in.Unpack(r) == BRZ_FAILURE ||
+		A_in.Unpack(g) == BRZ_FAILURE ||
+		A_in.Unpack(b) == BRZ_FAILURE ||
+		A_in.Unpack(a) == BRZ_FAILURE)
+	{
+		return BRZ_FAILURE;
+	}
+
+	return BRZ_SUCCESS;
+}
+
+
+unsigned int BRZ::Colour::Pack(BRZ::DiskStream & A_out) const
+{
+	if (A_out.Pack(r) == BRZ_FAILURE ||
+		A_out.Pack(g) == BRZ_FAILURE ||
+		A_out.Pack(b) == BRZ_FAILURE ||
+		A_out.Pack(a) == BRZ_FAILURE)
+	{
+		return 0xFFFFFFFF;
+	}
+
+	return (4 * sizeof(float));
+}
 
 
 float & BRZ::Colour::operator[](unsigned int A_idx)

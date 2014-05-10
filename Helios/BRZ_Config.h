@@ -17,9 +17,9 @@ namespace BRZ
 	public:
 		BRZRESULT	LoadFile(const BRZSTRING & cfgFile);
 		
-		const BRZSTRING &		ReadString(const BRZSTRING & variable);
-		const signed int &		ReadInt(const BRZSTRING & variable);
-		const float &			ReadFloat(const BRZSTRING & variable);
+		const BRZSTRING &		ReadString(const BRZSTRING & variable) const;
+		const signed int &		ReadInt(const BRZSTRING & variable) const;
+		const float &			ReadFloat(const BRZSTRING & variable) const;
 
 	protected:
 		BRZRESULT	ParseLine(const BRZSTRING & line);

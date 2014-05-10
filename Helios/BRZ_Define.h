@@ -32,18 +32,35 @@ typedef wchar_t				BRZCHAR;
 typedef std::wstring		BRZSTRING;
 typedef unsigned int		BRZRESULT;
 typedef DirectX::XMMATRIX	BRZMATRIX;
+typedef std::wistringstream	BRZISTREAM;
+typedef std::wostringstream	BRZOSTREAM;
 
 #define BRZ_SUCCESS		0
 #define BRZ_FAILURE		1
 
-// Certain mathematical constants:
+// Certain mathematical constants and functions:
 namespace BRZ
 {
 	const float EPS = 0.0000001f;
 	const float PI = DirectX::XM_PI;
 	const float HALF_PI = BRZ::PI / 2.0f;
 	const float TWO_PI = BRZ::PI * 2.0f;
+
+	inline float ClampRotation(float inRotation);
+	inline float DegreeToRad(float inDegree);
+	inline float RadToDegree(float inRadian);
 }
+
+
+// Forward declarations for general core classes:
+namespace BRZ
+{
+	class Config;
+	class DiskStream;
+	class Time;
+	class Window;
+}
+
 
 // Forward declaration for graphics module classes:
 namespace BRZ
@@ -105,4 +122,28 @@ void BRZ::CopyMem(T_type * A_dest, const T_type * A_src, unsigned int A_count)
 		return;
 
 	return BRZ::CopyMemBytes((BRZBYTE *)A_dest, (BRZBYTE *)A_src, A_count * sizeof(T_type));
+}
+
+
+float BRZ::ClampRotation(float A_in)
+{
+	while (A_in > BRZ::TWO_PI)
+		A_in -= BRZ::TWO_PI;
+
+	while (A_in < 0.0f)
+		A_in += BRZ::TWO_PI;
+
+	return A_in;
+}
+
+
+float BRZ::DegreeToRad(float A_in)
+{
+	return ((A_in / 360.0f) * BRZ::TWO_PI);
+}
+
+
+float BRZ::RadToDegree(float A_in)
+{
+	return ((A_in / BRZ::TWO_PI) * 360.0f);
 }

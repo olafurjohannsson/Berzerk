@@ -1,7 +1,33 @@
 
 #include "BRZ_Coord2.h"
 
+#include "BRZ_DiskStream.h"
+
 signed int BRZ::Coord2::BAD_INDEX = 0xBAD;
+
+
+BRZRESULT BRZ::Coord2::Unpack(BRZ::DiskStream & A_in)
+{
+	if (A_in.Unpack(x) == BRZ_FAILURE ||
+		A_in.Unpack(y) == BRZ_FAILURE)
+	{
+		return BRZ_FAILURE;
+	}
+
+	return BRZ_SUCCESS;
+}
+
+
+unsigned int BRZ::Coord2::Pack(BRZ::DiskStream & A_out) const
+{
+	if (A_out.Pack(x) == BRZ_FAILURE ||
+		A_out.Pack(y) == BRZ_FAILURE)
+	{
+		return 0xFFFFFFFF;
+	}
+
+	return (2 * sizeof(signed int));
+}
 
 
 BRZ::Coord2 BRZ::Coord2::operator+(const BRZ::Coord2 & A_ref) const

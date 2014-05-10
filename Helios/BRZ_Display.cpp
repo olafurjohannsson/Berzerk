@@ -55,11 +55,13 @@ BRZRESULT BRZ::Display::LoadGeometry(const BRZSTRING & A_file, const BRZSTRING &
 
 	BRZSTRING file = cache_dir + A_file;
 
-	if (cache_importer.Import(file, geo) != BRZ_SUCCESS)
+	if (cache_importer.Import(file) != BRZ_SUCCESS)
 	{
 		BRZ::Log("Failed to import ASE file.");
 		return BRZ_FAILURE;
 	}
+
+	cache_importer.CreateGeometry(geo);
 
 	return this->BakeGeometry(geo, A_name);
 }
@@ -210,7 +212,7 @@ BRZRESULT BRZ::Display::Link(BRZ::LineObject & A_obj, const BRZSTRING & A_name)
 			{
 				const BRZ::LineElement * elem = &obj_elements[temp->idElements[j]];
 				A_obj.elements[j].base = elem;
-				A_obj.elements[j].standard = true;
+				A_obj.elements[j].visible = true;
 				A_obj.elements[j].colour = elem->colour;
 				A_obj.elements[j].rotation = 0.0f;
 				A_obj.elements[j].offset = elem->localPos;
@@ -1030,21 +1032,21 @@ BRZRESULT BRZ::Display::Initialize(HWND A_wnd)
 		return BRZ_FAILURE;
 	}
 
-	if (this->InitPipeline(16) != BRZ_SUCCESS)
+	if (this->InitPipeline(64) != BRZ_SUCCESS)
 	{
 		wnd_log << "[Display::Initialize] failed: Could not initialize pipeline." << std::endl;
 		wnd_log.flush();
 		return BRZ_FAILURE;
 	}
 
-	if (this->InitCache(128, 128) != BRZ_SUCCESS)
+	if (this->InitCache(4096, 4096) != BRZ_SUCCESS)
 	{
 		wnd_log << "[Display::Initialize] failed: Could not initialize geometry cache." << std::endl;
 		wnd_log.flush();
 		return BRZ_FAILURE;
 	}
 
-	if (this->InitLibrary(32, 8) != BRZ_SUCCESS)
+	if (this->InitLibrary(128, 32) != BRZ_SUCCESS)
 	{
 		wnd_log << "[Display::Initialize] failed: Could not initialize object library." << std::endl;
 		wnd_log.flush();

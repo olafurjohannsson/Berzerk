@@ -17,8 +17,11 @@ namespace BRZ
 		struct Reference
 		{
 		public:
+			Reference() : base(NULL), visible (true), rotation(0)	{    }
+
+		public:
 			const BRZ::LineElement *	base;
-			bool						standard;
+			bool						visible;
 			BRZ::Colour					colour;
 			BRZ::Vec2					offset;
 			float						rotation;
@@ -32,9 +35,13 @@ namespace BRZ
 
 	public:
 		BRZRESULT Render(const BRZ::Vec2 & position, float rotation);
+		BRZRESULT ShowElement(unsigned int index);
+		BRZRESULT HideElement(unsigned int index);
+		BRZRESULT PlaceElement(unsigned int index, const BRZ::Vec2 & position);
+		BRZRESULT RotateElement(unsigned int index, const float & rotation);
 
-		// NOTE: PUBLIC FOR TESTING PURPOSES ONLY
-	public:
+		
+	private:
 		BRZ::Display *		display;
 		Reference *			elements;
 		unsigned int		numElements;

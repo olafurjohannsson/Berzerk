@@ -6,6 +6,10 @@
 
 #include "BRZ_Define.h"
 
+#include "BRZ_Colour.h"
+#include "BRZ_Coord2.h"
+#include "BRZ_Vec2.h"
+
 namespace BRZ
 {
 	class ASEImport
@@ -18,16 +22,22 @@ namespace BRZ
 		~ASEImport();
 
 	public:
-		BRZRESULT Import(const BRZSTRING & file, BRZ::RawGeometry & output);
+		BRZRESULT		Import(const BRZSTRING & file);
+
+		// Acquire the pure geometry as a RawGeometry Object:
+		BRZRESULT		CreateGeometry(BRZ::RawGeometry & output);
+
+		// Acquire access to the elements themselves:
+		unsigned int		NumElements() const;
+		const Element *		AcquireElement(unsigned int index);
 
 	protected:
 		BRZRESULT	OpenNewElement();
 		BRZRESULT	ParseElement();
 		BRZRESULT	CloseElement();
-		BRZRESULT	CreateGeometry(BRZ::RawGeometry & output);
+		
 
 		BRZRESULT	ParseNextCommand();
-		void		TrimLine();
 
 		BRZRESULT	ResetImporter();
 		BRZRESULT	Note(const std::string & message);
@@ -55,7 +65,12 @@ namespace BRZ
 		struct Element
 		{
 		public:
+			Element() : name(L""), rigid(false)	{    }
+
+		public:
 			BRZSTRING					name;
+			BRZ::Colour					colour;
+			bool						rigid;
 			std::vector<BRZ::Vec2>		points;
 			std::vector<BRZ::Coord2>	lines;
 		};

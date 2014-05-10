@@ -1,11 +1,25 @@
 
 #include "BRZ_ASEImport.h"
 
-#include "BRZ_Colour.h"
 #include "BRZ_Coord2.h"
 #include "BRZ_RawElement.h"
 #include "BRZ_RawGeometry.h"
 #include "BRZ_Vec2.h"
+
+
+unsigned int BRZ::ASEImport::NumElements() const
+{
+	return elem.size();
+}
+
+
+const BRZ::ASEImport::Element * BRZ::ASEImport::AcquireElement(unsigned int A_idx)
+{
+	if (A_idx >= elem.size())
+		return NULL;
+
+	return elem.at(A_idx);
+}
 
 
 BRZRESULT BRZ::ASEImport::CreateGeometry(BRZ::RawGeometry & A_geo)
@@ -24,7 +38,8 @@ BRZRESULT BRZ::ASEImport::CreateGeometry(BRZ::RawGeometry & A_geo)
 		BRZ::ASEImport::Element &	src = *(*i);
 		BRZ::RawElement &			obj = A_geo.elem[index];
 
-		obj.colour = BRZ::Colour(1.0f, 0.0f, 0.0f, 1.0f);
+		// obj.colour = BRZ::Colour(1.0f, 0.0f, 0.0f, 1.0f);
+		obj.colour = src.colour;
 		obj.AllocPoints(src.points.size());
 		for (auto j = src.points.cbegin(); j != src.points.cend(); ++j)
 		{
@@ -59,8 +74,10 @@ BRZRESULT BRZ::ASEImport::Note(const std::string & A_msg)
 }
 
 
-BRZRESULT BRZ::ASEImport::Import(const BRZSTRING & A_file, BRZ::RawGeometry & A_out)
+BRZRESULT BRZ::ASEImport::Import(const BRZSTRING & A_file)
 {
+	this->ResetImporter();
+
 	file.open(BRZ::Narrow(A_file).c_str());
 
 	if (!file.is_open())
@@ -98,25 +115,7 @@ BRZRESULT BRZ::ASEImport::Import(const BRZSTRING & A_file, BRZ::RawGeometry & A_
 	}
 
 	file.close();
-	this->CreateGeometry(A_out);
-	this->ResetImporter();
 	return BRZ_SUCCESS;
-}
-
-
-void BRZ::ASEImport::TrimLine()
-{
-	BRZSTRING	whitespace = L"\t\n ";
-
-	if (!line.empty())
-	{
-		if (line.find_first_not_of(whitespace) == BRZSTRING::npos)
-			return;
-
-		BRZSTRING::size_type	startIDX = line.find_first_not_of(whitespace);
-		BRZSTRING::size_type	endIDX = line.find_last_not_of(whitespace);
-		line = line.substr(startIDX, ((endIDX + 1) - startIDX));
-	}
 }
 
 
@@ -196,6 +195,20 @@ BRZRESULT BRZ::ASEImport::ParseElement()
 			pt_idx++;
 			continue;
 		}
+		else if (command == L"HELIOS_COLLIDES")
+		{
+			active->rigid = true;
+			continue;
+		}
+		else if (command == L"HELIOS_COLOUR")
+		{
+			tokens >> active->colour.r;
+			tokens >> active->colour.g;
+			tokens >> active->colour.b;
+			tokens >> active->colour.a;
+
+			continue;
+		}
 	}
 
 	this->CloseElement();
@@ -222,7 +235,7 @@ BRZRESULT BRZ::ASEImport::ParseNextCommand()
 	if (line.empty())
 		return BRZ_SUCCESS;
 
-	this->TrimLine();
+	BRZ::TrimString(line);
 
 	// Update our current indentation.
 	if (line.find_first_of(delimIn) != BRZSTRING::npos)

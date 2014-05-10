@@ -30,6 +30,11 @@ namespace BRZ
 		BRZ::Coord2 operator+(const BRZ::Coord2 & ref) const;
 
 	public:
+		// DiskStream utility functions:
+		BRZRESULT		Unpack(BRZ::DiskStream & inputFile);
+		unsigned int	Pack(BRZ::DiskStream & outputFile) const;
+
+	public:
 		signed int x;
 		signed int y;
 
