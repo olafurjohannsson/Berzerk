@@ -5,6 +5,7 @@
 *.txt
 *.idb
 *.pdb
+*.suo
 
 
 #ignore everything, then whitelist as necessary:

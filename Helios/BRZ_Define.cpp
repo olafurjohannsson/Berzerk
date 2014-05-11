@@ -43,6 +43,11 @@ BRZSTRING BRZ::Widen(const std::string & A_src)
 
 std::string BRZ::Narrow(const BRZSTRING & A_src)
 {
+	if (A_src.empty())
+	{
+		return "";
+	}
+
 	// Allocate the buffer, and set the last character to the null terminator:
 	char * buffer = new char[A_src.length() + 1];
 	buffer[A_src.length()] = '\0';

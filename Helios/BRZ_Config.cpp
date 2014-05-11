@@ -1,3 +1,4 @@
+#include <ctime>
 
 #include "BRZ_Config.h"
 
@@ -42,9 +43,15 @@ const BRZSTRING & BRZ::Config::ReadString(const BRZSTRING & A_var) const
 
 void BRZ::Config::Note(const BRZSTRING & A_msg)
 {
-	BRZSTRING msg = BRZSTRING(L"[Config]: ") + A_msg;
+	// Get current time
+	time_t time = std::time(0);
+	struct tm *now = std::localtime(&time);
 
-	log << BRZ::Narrow(msg) << std::endl;
+	// Format string with date and notification
+	wchar_t buffer[1024];
+	wsprintf(buffer, L"[Config]\t[%d.%d.%d %d:%d:%d]:\t", (now->tm_year + 1900), (now->tm_mon + 1), now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec);
+	
+	log << BRZ::Narrow(buffer) << std::endl;
 	log.flush();
 }
 

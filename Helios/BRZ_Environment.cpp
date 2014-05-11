@@ -1,6 +1,6 @@
 
 #include <Windows.h>
-
+#include <ctime>
 #include "BRZ_Environment.h"
 
 #include "BRZ_Craft.h"
@@ -195,7 +195,15 @@ BRZRESULT BRZ::Environment::ResolveInput(BRZ::InputEvent A_event)
 
 void BRZ::Environment::Note(const BRZSTRING & A_msg)
 {
-	log << BRZ::Narrow(BRZSTRING(L"[Environment]:\t") + A_msg) << std::endl;
+	// Get current time
+	time_t time = std::time(0);
+	struct tm *now = std::localtime(&time);
+
+	// Format string with date and notification
+	wchar_t buffer[1024];
+	wsprintf(buffer, L"[Environment]\t[%d.%d.%d %d:%d:%d]:\t", (now->tm_year + 1900), (now->tm_mon + 1), now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec);
+
+	log << BRZ::Narrow(buffer + A_msg) << std::endl;
 	log.flush();
 }
 
