@@ -15,14 +15,18 @@ namespace BRZ
 		class Component;
 
 	public:
-		Asset(std::ofstream & log);
+		Asset();
 		~Asset();
 
 	public:
 		// Functions for loading assets and saving:
-		BRZRESULT ImportASEObject(const BRZSTRING & file);
+		BRZRESULT ImportASEObject(const BRZSTRING & file, std::ofstream & log);
 		BRZRESULT ImportHeliosAsset(const BRZSTRING & file);
 		BRZRESULT ExportHeliosAsset(const BRZSTRING & file);
+
+		// Function for loading procedurally created geometry as an asset:
+		//	Note: Currently only able to import single-element objects:
+		BRZRESULT ImportProceduralObject(const BRZ::RawElement & geometry, const BRZSTRING & name, bool rigid);
 
 		// Functions for acquiring asset information:
 		const BRZSTRING &	Name() const;
@@ -42,7 +46,6 @@ namespace BRZ
 		BRZRESULT ProcessComponent(BRZ::Asset::Component & target);
 
 	private:
-		std::ofstream &	log;
 		bool			loaded;
 		BRZSTRING		name;
 		Component *		subObjects;

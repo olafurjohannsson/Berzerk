@@ -8,6 +8,8 @@
 #include "BRZ_RigidObject.h"
 
 
+
+
 //	Note: Produces a RigidElement (usable by the RigidObject class for collision detection)
 //			from the component information specified by the index.
 //		  Observe that this function is typically invoked by a RigidObject in the process of
@@ -178,6 +180,43 @@ BRZRESULT BRZ::Asset::ProcessComponent(BRZ::Asset::Component & A_src)
 	return BRZ_SUCCESS;
 }
 
+
+//	Note: Function imported a procedurally generated RawElement as an asset.  Currently procedural
+//			imports are limited to a single element, although this may change in future builds.
+//		  Observe that this function is invoked by the AsteroidGen class.
+BRZRESULT BRZ::Asset::ImportProceduralObject(const BRZ::RawElement & A_geo, const BRZSTRING & A_name, bool A_rigid)
+{
+	if (loaded)
+		return BRZ_FAILURE;
+
+	name = A_name;
+	subCount = 1;
+	subObjects = new BRZ::Asset::Component[subCount];
+
+	BRZ::Asset::Component &			target = subObjects[0];
+
+	target.colour = A_geo.colour;
+	target.isRigid = A_rigid;
+
+	// Copy point data:
+	target.points.reserve(A_geo.pointCount);
+	for (unsigned int i = 0; i < A_geo.pointCount; ++i)
+		target.points.push_back(A_geo.points[i]);
+
+	// Copy line data:
+	target.lines.reserve(A_geo.lineCount);
+	for (unsigned int i = 0; i != A_geo.lineCount; ++i)
+		target.lines.push_back(A_geo.lines[i]);
+
+	this->ProcessComponent(target);
+	// Note that the element should have its origin at (0, 0):
+	target.localOrigin = BRZ::Vec2(0, 0);
+
+	loaded = true;
+	return BRZ_SUCCESS;
+}
+
+
 //	Note: Exports internally loaded asset to a helios asset file, extension: .haf
 BRZRESULT BRZ::Asset::ExportHeliosAsset(const BRZSTRING & A_file)
 {
@@ -261,12 +300,12 @@ BRZRESULT BRZ::Asset::ImportHeliosAsset(const BRZSTRING & A_file)
 //		  Subsequently, the Elements determined by the ASEImporter are translated
 //			into the asset component format, and processed to update some of their
 //			characteristics to prepare them for usage in-game.
-BRZRESULT BRZ::Asset::ImportASEObject(const BRZSTRING & A_file)
+BRZRESULT BRZ::Asset::ImportASEObject(const BRZSTRING & A_file, std::ofstream & A_log)
 {
 	if (loaded)
 		return BRZ_FAILURE;
 
-	BRZ::ASEImport	importer(log);
+	BRZ::ASEImport	importer(A_log);
 
 	if (importer.Import(A_file) != BRZ_SUCCESS)
 		return BRZ_FAILURE;
@@ -319,14 +358,14 @@ BRZRESULT BRZ::Asset::ImportASEObject(const BRZSTRING & A_file)
 }
 
 
-BRZ::Asset::Asset(std::ofstream & A_log) :
-	log(A_log),
+BRZ::Asset::Asset() :
 	loaded(false),
 	name(L""),
 	subObjects(NULL),
 	subCount(0)
 {
 }
+
 
 
 BRZ::Asset::~Asset()

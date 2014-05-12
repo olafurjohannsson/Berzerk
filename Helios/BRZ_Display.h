@@ -113,10 +113,7 @@ namespace BRZ
 		BRZRESULT Render();
 
 		// For testing purposes:
-		BRZRESULT GenerateAsteroids();
-		BRZRESULT GenerateGeometry();
 		BRZRESULT GenerateGrid();
-		BRZRESULT TestQueue();
 
 	protected:
 		// Internal sub-routines -- called during initialization:

@@ -67,16 +67,6 @@ BRZRESULT BRZ::Display::LoadGeometry(const BRZSTRING & A_file, const BRZSTRING &
 }
 
 
-BRZRESULT BRZ::Display::GenerateAsteroids()
-{
-	BRZ::AsteroidGen gen;
-	BRZ::RawGeometry geo;
-
-	gen.MakeRock(geo);
-	return this->BakeGeometry(geo, L"rock");
-}
-
-
 BRZRESULT BRZ::Display::GenerateGrid()
 {
 	BRZ::RawGeometry	geo;
@@ -111,73 +101,6 @@ BRZRESULT BRZ::Display::GenerateGrid()
 	}
 
 	this->BakeGeometry(geo, L"grid");
-
-	return BRZ_SUCCESS;
-}
-
-
-BRZRESULT BRZ::Display::GenerateGeometry()
-{
-	BRZ::RawGeometry	geo;
-
-	geo.count = 2;
-	geo.elem = new BRZ::RawElement[2];
-
-	geo.elem[0].colour = BRZ::Colour(1.0f, 1.0f, 1.0f, 1.0f);
-	geo.elem[0].AllocPoints(3);
-	geo.elem[0].points[0] = BRZ::Vec2(-10.0f, -10.0f);
-	geo.elem[0].points[1] = BRZ::Vec2(10.0f, -10.0f);
-	geo.elem[0].points[2] = BRZ::Vec2(0.0f, 10.0f);
-	geo.elem[0].AllocLines(3);
-	geo.elem[0].lines[0] = BRZ::Coord2(0, 1);
-	geo.elem[0].lines[1] = BRZ::Coord2(1, 2);
-	geo.elem[0].lines[2] = BRZ::Coord2(2, 0);
-
-	geo.elem[1].colour = BRZ::Colour(1.0f, 0.0f, 0.0f, 1.0f);
-	geo.elem[1].AllocPoints(3);
-	geo.elem[1].points[0] = BRZ::Vec2(-30.0f, -30.0f);
-	geo.elem[1].points[1] = BRZ::Vec2(30.0f, -30.0f);
-	geo.elem[1].points[2] = BRZ::Vec2(0.0f, 30.0f);
-	geo.elem[1].AllocLines(3);
-	geo.elem[1].lines[0] = BRZ::Coord2(0, 1);
-	geo.elem[1].lines[1] = BRZ::Coord2(1, 2);
-	geo.elem[1].lines[2] = BRZ::Coord2(2, 0);
-
-	this->BakeGeometry(geo, L"craft");
-
-	BRZ::RawGeometry	box;
-	box.count = 1;
-	box.elem = new BRZ::RawElement[1];
-	BRZ::RawElement & elem = box.elem[0];
-
-	elem.colour = BRZ::Colour(1.0f, 1.0f, 0.0f, 1.0f);
-	elem.AllocPoints(4);
-	elem.AllocLines(4);
-
-	elem.points[0] = BRZ::Vec2(0.0f, 0.0f);
-	elem.points[1] = BRZ::Vec2(0.0f, 50.0f);
-	elem.points[2] = BRZ::Vec2(50.0f, 50.0f);
-	elem.points[3] = BRZ::Vec2(50.0f, 0.0f);
-
-	elem.lines[0] = BRZ::Coord2(0, 1);
-	elem.lines[1] = BRZ::Coord2(1, 2);
-	elem.lines[2] = BRZ::Coord2(2, 3);
-	elem.lines[3] = BRZ::Coord2(3, 0);
-
-	this->BakeGeometry(box, L"box");
-
-
-	return BRZ_SUCCESS;
-}
-
-
-BRZRESULT BRZ::Display::TestQueue()
-{
-	DirectX::XMFLOAT4X4 trans;
-	DirectX::XMStoreFloat4x4(&trans, DirectX::XMMatrixIdentity() * DirectX::XMMatrixRotationZ(0) * DirectX::XMMatrixTranslation(0, 0, 0));
-	
-	this->Queue(obj_elements[0], trans, obj_elements[0].colour);
-	this->Queue(obj_elements[1], trans, obj_elements[1].colour);
 
 	return BRZ_SUCCESS;
 }
@@ -1039,14 +962,14 @@ BRZRESULT BRZ::Display::Initialize(HWND A_wnd)
 		return BRZ_FAILURE;
 	}
 
-	if (this->InitCache(4096, 4096) != BRZ_SUCCESS)
+	if (this->InitCache(16384, 16384) != BRZ_SUCCESS)
 	{
 		wnd_log << "[Display::Initialize] failed: Could not initialize geometry cache." << std::endl;
 		wnd_log.flush();
 		return BRZ_FAILURE;
 	}
 
-	if (this->InitLibrary(128, 32) != BRZ_SUCCESS)
+	if (this->InitLibrary(512, 128) != BRZ_SUCCESS)
 	{
 		wnd_log << "[Display::Initialize] failed: Could not initialize object library." << std::endl;
 		wnd_log.flush();
@@ -1110,7 +1033,7 @@ BRZ::Display::Display(std::ofstream & A_log) :
 	vc_sys(0),
 	wnd_handle(NULL),
 	wnd_vSync(true),
-	wnd_fullScreen(false),
+	wnd_fullScreen(true),
 	wnd_log(A_log),
 	out_maxTickets(0),
 	out_usedTickets(0),

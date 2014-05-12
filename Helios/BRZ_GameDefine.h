@@ -27,6 +27,10 @@ namespace BRZ
 
 	class Skeleton;
 
+
+	inline float RandomFloat(float min, float max);
+
+
 	struct Orientation
 	{
 		Orientation() : rotation(0)	{    }
@@ -56,4 +60,20 @@ namespace BRZ
 			DEFAULT_MAX_BONES
 		};
 	}
+}
+
+
+//	Note: Function generates a random float such that A_min <= output <= A_max.
+float BRZ::RandomFloat(float A_min, float A_max)
+{
+	float			out = 0.0f;
+	float			range = A_max - A_min;
+	float			mul = 0.0001f;
+	unsigned int	mod = 10001;
+	unsigned int	base = ::rand() % mod;
+
+	out = (static_cast<float>(base)) * mul;
+	out = A_min + (range * out);
+
+	return out;
 }

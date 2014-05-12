@@ -3,6 +3,7 @@
 #include <ctime>
 #include "BRZ_Environment.h"
 
+#include "BRZ_AsteroidGen.h"
 #include "BRZ_Craft.h"
 #include "BRZ_RawGeometry.h"
 
@@ -13,10 +14,19 @@ BRZRESULT BRZ::Environment::Engage()
 		return BRZ_FAILURE;
 
 	BRZ::Craft	player(cfg);
-	player.Construct(as_craft, vid, input, BRZ::Vec2(), BRZ::HALF_PI / -2);
+	player.Construct(as_craft, vid, input);
 
-	BRZ::Actor	rock;
-	rock.Construct(as_g_centre, vid, input, BRZ::Vec2(100, 100), BRZ::HALF_PI / 2);
+
+	// Test Asteroid Generation:
+	BRZ::Actor			rock[10];
+	BRZ::Vec2			rockVec(-325, 100);
+	BRZ::Vec2			rockMod(70, 0);
+	for (unsigned int i = 0; i < 10; ++i)
+	{
+		rock[i].Construct(as_rock[i], vid, input, (rockVec + (rockMod * static_cast<float>(i))), 0);
+	}
+
+
 
 	Note(L"Engaging Helios....");
 	running = true;
@@ -48,14 +58,20 @@ BRZRESULT BRZ::Environment::Engage()
 		// Update the game world
 		player.Cycle(time.LastFrame());
 
-		if (player.TestCollision(rock))
-			player.Reset();
+		for (unsigned int i = 0; i < 10; ++i)
+		{
+			if (player.TestCollision(rock[i]))
+				player.Reset();
+		}
 
 
 		// Render as necessary, with the grid overlay on top:
 		player.Render();
-		rock.Render();
-		// grid.Render(BRZ::Vec2(), 0);
+		for (unsigned int i = 0; i < 10; ++i)
+		{
+			rock[i].Render();
+		}
+
 		vid.Render();
 
 		// Update the frame time:
@@ -94,8 +110,8 @@ BRZRESULT BRZ::Environment::LoadAssets()
 
 	BRZSTRING fileIn_Craft = cfg.ReadString(L"DataDirectory") + in_Craft;
 	BRZSTRING fileIn_GravityCentre = cfg.ReadString(L"DataDirectory") + in_GravityCentre;
-	as_craft.ImportASEObject(fileIn_Craft);
-	as_g_centre.ImportASEObject(fileIn_GravityCentre);
+	as_craft.ImportASEObject(fileIn_Craft, log);
+	as_g_centre.ImportASEObject(fileIn_GravityCentre, log);
 
 	BRZ::RawGeometry	geoA;
 	as_craft.ExtractGeometry(geoA);
@@ -104,6 +120,18 @@ BRZRESULT BRZ::Environment::LoadAssets()
 	BRZ::RawGeometry	geoB;
 	as_g_centre.ExtractGeometry(geoB);
 	vid.BakeGeometry(geoB, as_g_centre.Name());
+
+
+	// TEST ASTEROID GEN
+	BRZ::AsteroidGen	rockGen(cfg);
+	for (unsigned int i = 0; i < 10; ++i)
+	{
+		BRZ::RawGeometry	outGeo;
+
+		rockGen.MakeFractalRock(as_rock[i], 20 + i, i + 1);
+		as_rock[i].ExtractGeometry(outGeo);
+		vid.BakeGeometry(outGeo, as_rock[i].Name());
+	}
 	
 	// vid.LoadGeometry(L"craft.ASE", L"craft");
 
@@ -216,9 +244,7 @@ BRZ::Environment::Environment(std::ofstream & A_log) :
 	exit(false),
 	loaded(false),
 	running(false),
-	world(NULL),
-	as_craft(log),
-	as_g_centre(log)
+	world(NULL)
 {
 	Note(L"Helios Environment created.");
 }

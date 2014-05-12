@@ -57,5 +57,6 @@ namespace BRZ
 		BRZ::LineObject		grid;
 		BRZ::Asset			as_craft;
 		BRZ::Asset			as_g_centre;
+		BRZ::Asset			as_rock[10];
 	};
 }

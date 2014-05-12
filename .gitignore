@@ -18,7 +18,6 @@
 !*.cpp
 !*.h
 !*.sln
-!*.suo
 !*.md
 !*.vcxproj
 !*.filters

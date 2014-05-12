@@ -45,9 +45,6 @@
     <ClCompile Include="BRZ_RawGeometry.cpp">
       <Filter>Core Modules\Graphics\Geometry Import</Filter>
     </ClCompile>
-    <ClCompile Include="BRZ_AsteroidGen.cpp">
-      <Filter>Core Modules\Graphics\Geometry Import</Filter>
-    </ClCompile>
     <ClCompile Include="BRZ_Config.cpp">
       <Filter>Core Modules</Filter>
     </ClCompile>
@@ -74,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="BRZ_Craft.cpp">
       <Filter>Game Modules\Scene\Specific Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="BRZ_AsteroidGen.cpp">
+      <Filter>Game Modules\Asset Module</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -155,9 +155,6 @@
     <ClInclude Include="BRZ_RawElement.h">
       <Filter>Core Modules\Graphics\Geometry Import</Filter>
     </ClInclude>
-    <ClInclude Include="BRZ_AsteroidGen.h">
-      <Filter>Core Modules\Graphics\Geometry Import</Filter>
-    </ClInclude>
     <ClInclude Include="BRZ_Config.h">
       <Filter>Core Modules</Filter>
     </ClInclude>
@@ -190,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="BRZ_Craft.h">
       <Filter>Game Modules\Scene\Specific Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_AsteroidGen.h">
+      <Filter>Game Modules\Asset Module</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
