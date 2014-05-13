@@ -75,6 +75,9 @@
     <ClCompile Include="BRZ_AsteroidGen.cpp">
       <Filter>Game Modules\Asset Module</Filter>
     </ClCompile>
+    <ClCompile Include="BRZ_Emitter.cpp">
+      <Filter>Game Modules\Scene\Specific Actors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core Modules">
@@ -190,6 +193,9 @@
     </ClInclude>
     <ClInclude Include="BRZ_AsteroidGen.h">
       <Filter>Game Modules\Asset Module</Filter>
+    </ClInclude>
+    <ClInclude Include="BRZ_Emitter.h">
+      <Filter>Game Modules\Scene\Specific Actors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

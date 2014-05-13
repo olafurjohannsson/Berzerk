@@ -90,6 +90,7 @@
     <ClCompile Include="BRZ_Define.cpp" />
     <ClCompile Include="BRZ_DiskStream.cpp" />
     <ClCompile Include="BRZ_Display.cpp" />
+    <ClCompile Include="BRZ_Emitter.cpp" />
     <ClCompile Include="BRZ_Environment.cpp" />
     <ClCompile Include="BRZ_InputCore.cpp" />
     <ClCompile Include="BRZ_KeyState.cpp" />
@@ -118,6 +119,7 @@
     <ClInclude Include="BRZ_Define.h" />
     <ClInclude Include="BRZ_DiskStream.h" />
     <ClInclude Include="BRZ_Display.h" />
+    <ClInclude Include="BRZ_Emitter.h" />
     <ClInclude Include="BRZ_Environment.h" />
     <ClInclude Include="BRZ_GameDefine.h" />
     <ClInclude Include="BRZ_Input.h" />

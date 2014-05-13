@@ -154,6 +154,19 @@ BRZRESULT BRZ::Display::Link(BRZ::LineObject & A_obj, const BRZSTRING & A_name)
 }
 
 
+BRZRESULT BRZ::Display::QueueParticle(const BRZ::Vec2 & A_pos, const BRZ::Colour & A_col)
+{
+	BRZ::ParticleTicket		dest;
+
+	dest.colour = A_col;
+	DirectX::XMStoreFloat4x4(&dest.transform, DirectX::XMMatrixIdentity() * DirectX::XMMatrixTranslation(A_pos.x, A_pos.y, 0));
+
+	out_particles.push_back(dest);
+
+	return BRZ_SUCCESS;
+}
+
+
 BRZRESULT BRZ::Display::Queue(const BRZ::LineElement & A_elem, const DirectX::XMFLOAT4X4 & A_trans, const BRZ::Colour & A_col)
 {
 	// Set up testing variables:
@@ -435,6 +448,34 @@ BRZRESULT BRZ::Display::Render()
 		d3d_context->DrawIndexed(out_queue[j].idxCount, out_queue[j].idxOffset, 0);
 	}
 
+	// For each particle ticket in queue, draw:
+	d3d_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+	for (auto i = out_particles.cbegin(); i != out_particles.cend(); ++i)
+	{
+		result = d3d_context->Map(out_shaderInput, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		if (!BRZ::Test("Failed to map shader constant buffer for particle rendering."))
+			return BRZ_FAILURE;
+
+		dataPtr = static_cast<BRZ::ShaderConstants *>(mappedResource.pData);
+		BRZMATRIX lWorld = DirectX::XMLoadFloat4x4(&i->transform);
+		dataPtr->world = DirectX::XMMatrixTranspose(lWorld);
+		dataPtr->view = tView;
+		dataPtr->proj = tProj;
+		BRZ::CopyMem(reinterpret_cast<float *>(&dataPtr->col), i->colour.ptr, 4);
+		
+		d3d_context->Unmap(out_shaderInput, 0);
+		d3d_context->VSSetConstantBuffers(0, 1, &out_shaderInput);
+
+		// Set the input layout and shaders:
+		d3d_context->IASetInputLayout(out_inputLayout);
+		d3d_context->VSSetShader(out_vertexShader, NULL, 0);
+		d3d_context->PSSetShader(out_pixelShader, NULL, 0);
+
+		// Draw lines:
+		d3d_context->DrawIndexed(1, 0, 0);
+	}
+	out_particles.clear();
+
 
 	if(wnd_vSync)
 	{
@@ -502,6 +543,16 @@ BRZRESULT BRZ::Display::InitCache(unsigned int A_maxPt, unsigned int A_maxLn)
 	cache_lines = new BRZ::Coord2[A_maxLn];
 	cache_maxLines = A_maxLn;
 	cache_usedLines = 0;
+
+	// Set up the point used to render PARTICLES:
+	cache_points[0].pos.x = 0;
+	cache_points[0].pos.y = 0;
+	cache_points[0].pos.z = 10;
+	cache_usedPoints++;
+
+	cache_lines[0].x = 0;
+	cache_lines[0].y = 0;	// unused.
+	cache_usedLines++;
 
 	return BRZ_SUCCESS;
 }
@@ -628,6 +679,8 @@ BRZRESULT BRZ::Display::InitPipeline(unsigned int A_maxTick)
 	out_maxTickets = A_maxTick;
 	out_usedTickets = 0;
 	out_queue = new BRZ::RenderTicket[A_maxTick];
+
+	out_particles.reserve(1024);
 
 
 	return BRZ_SUCCESS;
@@ -1033,7 +1086,7 @@ BRZ::Display::Display(std::ofstream & A_log) :
 	vc_sys(0),
 	wnd_handle(NULL),
 	wnd_vSync(true),
-	wnd_fullScreen(true),
+	wnd_fullScreen(false),
 	wnd_log(A_log),
 	out_maxTickets(0),
 	out_usedTickets(0),

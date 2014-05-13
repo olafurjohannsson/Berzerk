@@ -5,6 +5,7 @@
 
 #include "BRZ_AsteroidGen.h"
 #include "BRZ_Craft.h"
+#include "BRZ_Emitter.h"
 #include "BRZ_RawGeometry.h"
 
 
@@ -25,6 +26,31 @@ BRZRESULT BRZ::Environment::Engage()
 	{
 		rock[i].Construct(as_rock[i], vid, input, (rockVec + (rockMod * static_cast<float>(i))), 0);
 	}
+
+	// Test Particle Emitters:
+	BRZ::Emitter		parts;
+	bool				partsOn = false;
+	parts.Construct(as_helper, vid, input, BRZ::Vec2(100, 0), BRZ::PI);
+
+	BRZ::Emitter::Description	desc;
+	desc.lifeEmitter	= cfg.ReadInt(L"PartLifeEmitter");
+	desc.lifeParticle	= cfg.ReadInt(L"PartLifeParticle");
+	desc.lifeSkew		= cfg.ReadInt(L"PartLifeSkew");
+	desc.genRate		= cfg.ReadFloat(L"PartGenRate");
+	desc.genPasses		= cfg.ReadInt(L"PartGenPasses");
+	desc.angleSkew		= cfg.ReadFloat(L"PartAngleSkew");
+	desc.velocityOut	= cfg.ReadFloat(L"PartVelocityOut");
+	desc.velocitySkew	= cfg.ReadFloat(L"PartVelocitySkew");
+
+	desc.colour[0] = BRZ::Colour(1, 1, 1, 1);
+	desc.colourSpread[0] = 0.3f;
+	desc.colour[1] = BRZ::Colour(1, 1, 0, 1);
+	desc.colourSpread[1] = 0.6f;
+	desc.colour[2] = BRZ::Colour(1, 0, 0, 1);
+	desc.colourSpread[2] = 1.0f;
+	desc.colour[3] = BRZ::Colour(0, 0, 0, 1);
+
+
 
 
 
@@ -57,16 +83,32 @@ BRZRESULT BRZ::Environment::Engage()
 
 		// Update the game world
 		player.Cycle(time.LastFrame());
+		parts.Cycle(time.LastFrame());
+
+		if (partsOn && parts.IsComplete())
+		{
+			parts.Reset();
+			partsOn = false;
+		}
 
 		for (unsigned int i = 0; i < 10; ++i)
 		{
 			if (player.TestCollision(rock[i]))
+			{
 				player.Reset();
+
+				if (!partsOn)
+				{
+					parts.Engage(desc, log);
+					partsOn = true;
+				}
+			}
 		}
 
 
 		// Render as necessary, with the grid overlay on top:
 		player.Render();
+		parts.Render();
 		for (unsigned int i = 0; i < 10; ++i)
 		{
 			rock[i].Render();
@@ -132,6 +174,11 @@ BRZRESULT BRZ::Environment::LoadAssets()
 		as_rock[i].ExtractGeometry(outGeo);
 		vid.BakeGeometry(outGeo, as_rock[i].Name());
 	}
+
+	as_helper.ImportASEObject(cfg.ReadString(L"DataDirectory") + BRZSTRING(L"particle_helper.ASE"), log);
+	BRZ::RawGeometry	geoC;
+	as_helper.ExtractGeometry(geoC);
+	vid.BakeGeometry(geoC, as_helper.Name());
 	
 	// vid.LoadGeometry(L"craft.ASE", L"craft");
 

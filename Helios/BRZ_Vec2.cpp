@@ -103,8 +103,7 @@ BRZ::Vec2 BRZ::Vec2::operator*(const float & A_scalar) const
 {
 	BRZ::Vec2 out(*this);
 
-	out.x *= A_scalar;
-	out.y *= A_scalar;
+	out *= A_scalar;
 
 	return out;
 }

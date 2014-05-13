@@ -64,6 +64,14 @@ namespace BRZ
 		DirectX::XMFLOAT4X4		transform;
 	};
 
+	struct ParticleTicket
+	{
+		ParticleTicket() { BRZ::ZeroMem(this);	}
+
+		BRZ::Colour				colour;
+		DirectX::XMFLOAT4X4		transform;
+	};
+
 
 
 	template <class T_type>
@@ -110,6 +118,7 @@ namespace BRZ
 
 		BRZRESULT Link(BRZ::LineObject & object, const BRZSTRING & objName);
 		BRZRESULT Queue(const BRZ::LineElement & element, const DirectX::XMFLOAT4X4 & transform, const BRZ::Colour & colour);
+		BRZRESULT QueueParticle(const BRZ::Vec2 & position, const BRZ::Colour & colour);
 		BRZRESULT Render();
 
 		// For testing purposes:
@@ -160,6 +169,7 @@ namespace BRZ
 		unsigned int							out_maxTickets;
 		unsigned int							out_usedTickets;
 		BRZ::RenderTicket *						out_queue;
+		std::vector<BRZ::ParticleTicket>		out_particles;
 
 
 		// Geometry cache objects:
